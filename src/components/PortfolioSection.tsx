@@ -1,39 +1,6 @@
 import { Badge } from "@/components/ui/badge";
-
-const projects = [
-  {
-    tag: "Enterprise",
-    title: "Data Center & Visitor Management System",
-    client: "PLN (State Electricity Company)",
-    description:
-      "A complex high-security visitor data and asset management system for Indonesia's national electricity company. Multi-location deployment with Docker containerization.",
-    tech: ["ASP.NET Core", "MariaDB", "Docker", "Linux"],
-  },
-  {
-    tag: "SaaS",
-    title: "Jetkios POS Platform",
-    client: "Small Merchants",
-    description:
-      "A comprehensive Point of Sales web application for small merchants handling product stock management, transaction recording, and sales reporting.",
-    tech: ["Nuxt.js", "PostgreSQL", "Redis"],
-  },
-  {
-    tag: "Public Sector",
-    title: "Government Portals",
-    client: "Surabaya City Gov & Ministry of Public Works",
-    description:
-      "Information portals ensuring high accessibility and transparency for government institutions, built with security and compliance standards.",
-    tech: ["Laravel", "PHP", "MySQL"],
-  },
-  {
-    tag: "Mobile",
-    title: "Smart Tourism & E-Commerce",
-    client: "Persija Jakarta, PSS Sleman & Travel Platforms",
-    description:
-      "Android & iOS apps for Travel Marketplaces and Liga 1 Football Clubs, featuring ticketing, e-commerce, and fan engagement features.",
-    tech: ["Flutter", "Android", "Golang", "Next.js"],
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations, t } from "@/data/translations";
 
 const tagColors: Record<string, string> = {
   Enterprise: "bg-primary/15 text-primary border-primary/20",
@@ -43,26 +10,24 @@ const tagColors: Record<string, string> = {
 };
 
 const PortfolioSection = () => {
+  const { lang } = useLanguage();
+  const port = translations.portfolio;
+
   return (
     <section id="portfolio" className="section-padding">
       <div className="container-narrow">
         <div className="text-center mb-16">
-          <p className="text-primary font-mono text-sm tracking-wider uppercase mb-3">Portfolio</p>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Featured Projects
-          </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            Real-world solutions delivered for enterprises, governments, and startups.
-          </p>
+          <p className="text-primary font-mono text-sm tracking-wider uppercase mb-3">{t(port.label, lang)}</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t(port.title, lang)}</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">{t(port.subtitle, lang)}</p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {projects.map((project) => (
+          {port.projects.map((project, i) => (
             <div
-              key={project.title}
+              key={i}
               className="group bg-card-gradient border border-border rounded-xl overflow-hidden hover:border-primary/30 transition-all duration-300"
             >
-              {/* Colored top bar */}
               <div className="h-1 bg-gradient-to-r from-primary to-primary/50" />
               <div className="p-8">
                 <div className="flex items-center gap-3 mb-4">
@@ -72,19 +37,19 @@ const PortfolioSection = () => {
                   >
                     {project.tag}
                   </Badge>
-                  <span className="text-xs text-muted-foreground">{project.client}</span>
+                  <span className="text-xs text-muted-foreground">{t(project.client, lang)}</span>
                 </div>
-                <h3 className="text-lg font-semibold mb-3">{project.title}</h3>
+                <h3 className="text-lg font-semibold mb-3">{t(project.title, lang)}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed mb-5">
-                  {project.description}
+                  {t(project.description, lang)}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {project.tech.map((t) => (
+                  {project.tech.map((item) => (
                     <span
-                      key={t}
+                      key={item}
                       className="px-2.5 py-1 rounded bg-secondary text-xs text-secondary-foreground font-mono"
                     >
-                      {t}
+                      {item}
                     </span>
                   ))}
                 </div>

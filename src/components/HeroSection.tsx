@@ -1,8 +1,13 @@
 import { ArrowRight, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations, t } from "@/data/translations";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const HeroSection = () => {
+  const { lang } = useLanguage();
+  const hero = translations.hero;
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
@@ -21,30 +26,29 @@ const HeroSection = () => {
         <div className="animate-fade-up">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-secondary/50 text-sm text-muted-foreground mb-8">
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            Trusted by Enterprise & Startups
+            {t(hero.badge, lang)}
           </span>
         </div>
 
         <h1 className="animate-fade-up-delay-1 text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.1] mb-6 max-w-4xl mx-auto">
-          Engineering Scalable{" "}
-          <span className="text-gradient">Digital Solutions</span>{" "}
-          for Enterprises & Startups.
+          {t(hero.headlineBefore, lang)}
+          <span className="text-gradient">{t(hero.headlineHighlight, lang)}</span>
+          {t(hero.headlineAfter, lang)}
         </h1>
 
         <p className="animate-fade-up-delay-2 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-          Combining 16+ years of expertise in High-Performance Backend, 
-          Enterprise Systems, and Mobile Innovations.
+          {t(hero.subheadline, lang)}
         </p>
 
         <div className="animate-fade-up-delay-3 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Button size="lg" className="gap-2 px-8 text-base" asChild>
             <a href="#services">
-              Our Services <ArrowRight className="w-4 h-4" />
+              {t(hero.ctaServices, lang)} <ArrowRight className="w-4 h-4" />
             </a>
           </Button>
           <Button size="lg" variant="outline" className="gap-2 px-8 text-base" asChild>
             <a href="#contact">
-              <Calendar className="w-4 h-4" /> Book a Consultation
+              <Calendar className="w-4 h-4" /> {t(hero.ctaConsult, lang)}
             </a>
           </Button>
         </div>
