@@ -5,8 +5,8 @@ const services = [
     icon: Building2,
     title: "Enterprise System Integration",
     description:
-      "Custom ERP, Visitor Management Systems, and internal tools using .NET Core and Java. Built for security, reliability, and compliance.",
-    tags: [".NET Core", "Java", "SQL Server"],
+      "Custom ERP, Visitor Management, HRIS, and mission-critical internal tools using .NET Core and Java. We specialize in System Analysis for large organizations — designing complex SQL Server and MariaDB architectures that power national-scale operations with strict security, high availability, and regulatory compliance.",
+    tags: [".NET Core", "Java", "SQL Server", "System Analysis"],
   },
   {
     icon: Rocket,
