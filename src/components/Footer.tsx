@@ -1,6 +1,11 @@
 import { Github, Linkedin } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations, t } from "@/data/translations";
 
 const Footer = () => {
+  const { lang } = useLanguage();
+  const f = translations.footer;
+
   return (
     <footer className="border-t border-border py-12 px-4">
       <div className="container-narrow flex flex-col md:flex-row items-center justify-between gap-6">
@@ -9,7 +14,7 @@ const Footer = () => {
             <span className="text-gradient">Nexus</span>Logic
           </a>
           <p className="text-sm text-muted-foreground mt-1">
-            Engineering scalable digital solutions.
+            {t(f.tagline, lang)}
           </p>
         </div>
 
@@ -33,7 +38,7 @@ const Footer = () => {
         </div>
 
         <p className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Nexus Logic. All rights reserved.
+          © {new Date().getFullYear()} Nexus Logic. {t(f.rights, lang)}
         </p>
       </div>
     </footer>

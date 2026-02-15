@@ -1,75 +1,50 @@
 import { Building2, Rocket, Smartphone, Cloud } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations, t } from "@/data/translations";
 
-const services = [
-  {
-    icon: Building2,
-    title: "Enterprise System Integration",
-    description:
-      "Custom ERP, Visitor Management, HRIS, and mission-critical internal tools using .NET Core and Java. We specialize in System Analysis for large organizations — designing complex SQL Server and MariaDB architectures that power national-scale operations with strict security, high availability, and regulatory compliance.",
-    tags: [".NET Core", "Java", "SQL Server", "System Analysis"],
-  },
-  {
-    icon: Rocket,
-    title: "SaaS & Product Development",
-    description:
-      "End-to-end development for startups — from MVP to scale. We leverage AI-assisted workflows and bleeding-edge tech like Golang and Typesense for lightning-fast search capabilities, paired with Next.js, React, and Python for rapid iteration.",
-    tags: ["Next.js", "React", "Golang", "Typesense", "AI Workflows"],
-  },
-  {
-    icon: Smartphone,
-    title: "Mobile App Ecosystems",
-    description:
-      "Native Android and cross-platform Flutter apps for retail, tourism, and management. Published on Play Store & App Store.",
-    tags: ["Flutter", "Android", "iOS"],
-  },
-  {
-    icon: Cloud,
-    title: "DevOps & Infrastructure",
-    description:
-      "Server management, Docker containerization, CI/CD pipelines, and Linux optimization for high-traffic production environments.",
-    tags: ["Docker", "Linux", "CI/CD"],
-  },
-];
+const icons = [Building2, Rocket, Smartphone, Cloud];
 
 const ServicesSection = () => {
+  const { lang } = useLanguage();
+  const svc = translations.services;
+
   return (
     <section id="services" className="section-padding bg-glow">
       <div className="container-narrow">
         <div className="text-center mb-16">
-          <p className="text-primary font-mono text-sm tracking-wider uppercase mb-3">Our Services</p>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            What We Build
-          </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
-            From enterprise systems to mobile apps, we deliver solutions that scale.
-          </p>
+          <p className="text-primary font-mono text-sm tracking-wider uppercase mb-3">{t(svc.label, lang)}</p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t(svc.title, lang)}</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">{t(svc.subtitle, lang)}</p>
         </div>
 
         <div className="grid sm:grid-cols-2 gap-6">
-          {services.map((service, i) => (
-            <div
-              key={service.title}
-              className="group bg-card-gradient border border-border rounded-xl p-8 hover:border-primary/40 hover:shadow-glow transition-all duration-500"
-            >
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
-                <service.icon className="w-6 h-6 text-primary" />
+          {svc.items.map((service, i) => {
+            const Icon = icons[i];
+            return (
+              <div
+                key={i}
+                className="group bg-card-gradient border border-border rounded-xl p-8 hover:border-primary/40 hover:shadow-glow transition-all duration-500"
+              >
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
+                  <Icon className="w-6 h-6 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">{t(service.title, lang)}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed mb-5">
+                  {t(service.description, lang)}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {service.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1 rounded-full bg-secondary text-xs text-secondary-foreground font-mono"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed mb-5">
-                {service.description}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {service.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-3 py-1 rounded-full bg-secondary text-xs text-secondary-foreground font-mono"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

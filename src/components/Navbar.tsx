@@ -1,17 +1,21 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-const links = [
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Portfolio", href: "#portfolio" },
-  { label: "Tech", href: "#tech" },
-  { label: "Contact", href: "#contact" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
+import { translations, t } from "@/data/translations";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const { lang, toggleLang } = useLanguage();
+  const nav = translations.nav;
+
+  const links = [
+    { label: t(nav.about, lang), href: "#about" },
+    { label: t(nav.services, lang), href: "#services" },
+    { label: t(nav.portfolio, lang), href: "#portfolio" },
+    { label: t(nav.tech, lang), href: "#tech" },
+    { label: t(nav.contact, lang), href: "#contact" },
+  ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
@@ -31,15 +35,33 @@ const Navbar = () => {
               {link.label}
             </a>
           ))}
+          <button
+            onClick={toggleLang}
+            className="flex items-center gap-1 text-xs font-mono border border-border rounded-full px-3 py-1.5 hover:border-primary/50 transition-colors"
+          >
+            <span className={lang === "en" ? "text-primary font-semibold" : "text-muted-foreground"}>EN</span>
+            <span className="text-muted-foreground">/</span>
+            <span className={lang === "id" ? "text-primary font-semibold" : "text-muted-foreground"}>ID</span>
+          </button>
           <Button size="sm" asChild>
-            <a href="#contact">Get in Touch</a>
+            <a href="#contact">{t(nav.getInTouch, lang)}</a>
           </Button>
         </div>
 
         {/* Mobile toggle */}
-        <button className="md:hidden text-foreground" onClick={() => setOpen(!open)}>
-          {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        <div className="flex md:hidden items-center gap-3">
+          <button
+            onClick={toggleLang}
+            className="flex items-center gap-1 text-xs font-mono border border-border rounded-full px-2.5 py-1 hover:border-primary/50 transition-colors"
+          >
+            <span className={lang === "en" ? "text-primary font-semibold" : "text-muted-foreground"}>EN</span>
+            <span className="text-muted-foreground">/</span>
+            <span className={lang === "id" ? "text-primary font-semibold" : "text-muted-foreground"}>ID</span>
+          </button>
+          <button className="text-foreground" onClick={() => setOpen(!open)}>
+            {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
@@ -56,7 +78,7 @@ const Navbar = () => {
             </a>
           ))}
           <Button size="sm" className="w-full" asChild>
-            <a href="#contact" onClick={() => setOpen(false)}>Get in Touch</a>
+            <a href="#contact" onClick={() => setOpen(false)}>{t(nav.getInTouch, lang)}</a>
           </Button>
         </div>
       )}
