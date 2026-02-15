@@ -12,8 +12,8 @@ const services = [
     icon: Rocket,
     title: "SaaS & Product Development",
     description:
-      "End-to-end development for startups — from MVP to scale. Modern stacks with Next.js, React, Golang, and Python for rapid iteration.",
-    tags: ["Next.js", "React", "Golang"],
+      "End-to-end development for startups — from MVP to scale. We leverage AI-assisted workflows and bleeding-edge tech like Golang and Typesense for lightning-fast search capabilities, paired with Next.js, React, and Python for rapid iteration.",
+    tags: ["Next.js", "React", "Golang", "Typesense", "AI Workflows"],
   },
   {
     icon: Smartphone,
