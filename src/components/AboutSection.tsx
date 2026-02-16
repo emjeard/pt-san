@@ -22,7 +22,7 @@ const AboutSection = () => {
             const Icon = icons[i];
             return (
               <div
-                key={founder.name}
+                key={i}
                 className="bg-card-gradient border border-border rounded-xl p-8 hover:border-primary/30 transition-colors duration-300"
               >
                 <div className="flex items-center gap-3 mb-4">
@@ -30,8 +30,7 @@ const AboutSection = () => {
                     <Icon className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold">{founder.name}</h3>
-                    <p className="text-sm text-primary">{t(founder.title, lang)}</p>
+                    <h3 className="text-lg font-semibold">{t(founder.title, lang)}</h3>
                   </div>
                 </div>
                 <p className="text-muted-foreground text-sm leading-relaxed mb-5">
