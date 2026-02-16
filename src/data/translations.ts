@@ -170,7 +170,7 @@ export const translations = {
   },
   whyUs: {
     label: { en: "Why Us", id: "Mengapa Kami" },
-    title: { en: "Why Choose Nexus Logic", id: "Mengapa Memilih Nexus Logic" },
+    title: { en: "Why Choose Rimutama", id: "Mengapa Memilih Rimutama" },
     reasons: [
       {
         title: { en: "Proven Reliability", id: "Keandalan Terbukti" },
@@ -191,6 +191,64 @@ export const translations = {
         description: {
           en: "Systems designed to handle growth from Day 1. Microservices, containerization, and cloud-native approaches built into every project.",
           id: "Sistem yang dirancang untuk menangani pertumbuhan sejak Hari Pertama. Microservices, containerization, dan pendekatan cloud-native terintegrasi di setiap proyek.",
+        },
+      },
+    ],
+  },
+  timeline: {
+    label: { en: "Our Journey", id: "Perjalanan Kami" },
+    title: { en: "Project History", id: "Sejarah Proyek" },
+    subtitle: {
+      en: "Key milestones that shaped Rimutama into who we are today.",
+      id: "Tonggak penting yang membentuk Rimutama menjadi seperti sekarang.",
+    },
+    milestones: [
+      {
+        year: "2009",
+        title: { en: "The Foundation", id: "Awal Mula" },
+        description: {
+          en: "Started building enterprise systems with .NET/C# for major Indonesian corporations.",
+          id: "Mulai membangun sistem enterprise dengan .NET/C# untuk korporasi besar Indonesia.",
+        },
+      },
+      {
+        year: "2014",
+        title: { en: "Enterprise Expansion", id: "Ekspansi Enterprise" },
+        description: {
+          en: "Secured contracts with PLN, Pertamina, and Telkom — delivering mission-critical systems at national scale.",
+          id: "Mendapatkan kontrak dengan PLN, Pertamina, dan Telkom — menghadirkan sistem mission-critical skala nasional.",
+        },
+      },
+      {
+        year: "2017",
+        title: { en: "Mobile & Product Innovation", id: "Inovasi Mobile & Produk" },
+        description: {
+          en: "Launched mobile app development with Flutter and Android, expanding into tourism and retail ecosystems.",
+          id: "Meluncurkan pengembangan aplikasi mobile dengan Flutter dan Android, merambah ekosistem pariwisata dan retail.",
+        },
+      },
+      {
+        year: "2020",
+        title: { en: "SaaS & AI Workflows", id: "SaaS & Workflow AI" },
+        description: {
+          en: "Built Jetkios POS and adopted AI-assisted development workflows for faster delivery cycles.",
+          id: "Membangun Jetkios POS dan mengadopsi workflow development berbasis AI untuk siklus delivery yang lebih cepat.",
+        },
+      },
+      {
+        year: "2023",
+        title: { en: "Rimutama Established", id: "Rimutama Didirikan" },
+        description: {
+          en: "Officially formed Rimutama — combining 16+ years of expertise into a unified digital solutions company.",
+          id: "Resmi mendirikan Rimutama — menggabungkan 16+ tahun pengalaman menjadi perusahaan solusi digital terpadu.",
+        },
+      },
+      {
+        year: "2025",
+        title: { en: "Scaling New Frontiers", id: "Menjangkau Cakrawala Baru" },
+        description: {
+          en: "Expanding into cloud-native architecture, Golang microservices, and Typesense-powered search solutions.",
+          id: "Merambah arsitektur cloud-native, microservices Golang, dan solusi pencarian berbasis Typesense.",
         },
       },
     ],
