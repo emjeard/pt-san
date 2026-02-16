@@ -40,17 +40,17 @@ export const translations = {
     },
     founders: [
       {
-        name: "M. Jeffri",
-        title: { en: "Product & Innovation Lead", id: "Pemimpin Produk & Inovasi" },
+        name: "",
+        title: { en: "Product & Innovation", id: "Produk & Inovasi" },
         description: {
-          en: "8+ years of experience in Fullstack Development (Next.js, Golang, Python) & Mobile (Flutter). Built SaaS platforms like Jetkios POS and tourism apps. Pioneered AI-assisted development workflows for faster delivery.",
-          id: "8+ tahun pengalaman dalam Fullstack Development (Next.js, Golang, Python) & Mobile (Flutter). Membangun platform SaaS seperti Jetkios POS dan aplikasi pariwisata. Merintis workflow development berbasis AI untuk delivery yang lebih cepat.",
+          en: "8+ years of experience in Fullstack Development (Next.js, Golang, Python) & Mobile (Flutter). Built SaaS platforms and tourism apps. Pioneered AI-assisted development workflows for faster delivery.",
+          id: "8+ tahun pengalaman dalam Fullstack Development (Next.js, Golang, Python) & Mobile (Flutter). Membangun platform SaaS dan aplikasi pariwisata. Merintis workflow development berbasis AI untuk delivery yang lebih cepat.",
         },
         skills: ["Next.js", "Golang", "Flutter", "Python", "PostgreSQL"],
       },
       {
-        name: "Zainal Abidin",
-        title: { en: "System Architect & Enterprise Lead", id: "System Architect & Pemimpin Enterprise" },
+        name: "",
+        title: { en: "System Architecture & Enterprise", id: "Arsitektur Sistem & Enterprise" },
         description: {
           en: "15+ years building mission-critical enterprise systems with .NET/C# for major organizations including PLN, Pertamina, and Telkom. Specialist in Legacy System Modernization and High-Availability Infrastructure.",
           id: "15+ tahun membangun sistem enterprise mission-critical dengan .NET/C# untuk organisasi besar termasuk PLN, Pertamina, dan Telkom. Spesialis dalam Modernisasi Legacy System dan Infrastruktur High-Availability.",
