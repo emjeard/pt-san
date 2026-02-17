@@ -33,10 +33,10 @@ export const translations = {
   },
   about: {
     label: { en: "Who We Are", id: "Siapa Kami" },
-    title: { en: "Led by Senior Experts", id: "Dipimpin oleh Pakar Senior" },
+    title: { en: "Our Team", id: "Tim Kami" },
     subtitle: {
-      en: "Two complementary leaders combining deep enterprise experience with modern product innovation.",
-      id: "Dua pemimpin yang saling melengkapi, menggabungkan pengalaman enterprise mendalam dengan inovasi produk modern.",
+      en: "Two complementary skill sets combining enterprise experience with modern product development.",
+      id: "Dua keahlian yang saling melengkapi, menggabungkan pengalaman enterprise dengan pengembangan produk modern.",
     },
     founders: [
       {
