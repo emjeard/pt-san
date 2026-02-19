@@ -220,7 +220,7 @@ export const translations = {
   },
   whyUs: {
     label: { en: "Why Us", id: "Mengapa Kami" },
-    title: { en: "Why Choose Rimutama", id: "Mengapa Memilih Rimutama" },
+    title: { en: "Why Choose Almahira Tech", id: "Mengapa Memilih Almahira Tech" },
     reasons: [
       {
         title: { en: "Proven Reliability", id: "Keandalan Terbukti" },
@@ -335,10 +335,10 @@ export const translations = {
       },
       {
         year: "2025",
-        title: { en: "Rimutama — Unified Digital Solutions", id: "Rimutama — Solusi Digital Terpadu" },
+        title: { en: "Almahira Tech — Unified Digital Solutions", id: "Almahira Tech — Solusi Digital Terpadu" },
         description: {
-          en: "Officially established Rimutama, combining 16+ years of enterprise and product expertise. Now building with Golang microservices, Typesense-powered search, and cloud-native architecture at Hedra.id and beyond — serving enterprises, governments, and startups across Indonesia.",
-          id: "Resmi mendirikan Rimutama, menggabungkan 16+ tahun keahlian enterprise dan produk. Kini membangun dengan microservices Golang, pencarian berbasis Typesense, dan arsitektur cloud-native di Hedra.id dan lainnya — melayani enterprise, pemerintah, dan startup di seluruh Indonesia.",
+          en: "Officially established Almahira Tech, combining 16+ years of enterprise and product expertise. Now building with Golang microservices, Typesense-powered search, and cloud-native architecture at Hedra.id and beyond — serving enterprises, governments, and startups across Indonesia.",
+          id: "Resmi mendirikan Almahira Tech, menggabungkan 16+ tahun keahlian enterprise dan produk. Kini membangun dengan microservices Golang, pencarian berbasis Typesense, dan arsitektur cloud-native di Hedra.id dan lainnya — melayani enterprise, pemerintah, dan startup di seluruh Indonesia.",
         },
         tags: ["Golang", "Typesense", "Next.js", "Python", "Docker"],
         highlight: true,
