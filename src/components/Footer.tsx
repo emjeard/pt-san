@@ -11,7 +11,7 @@ const Footer = () => {
       <div className="container-narrow flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
           <a href="#" className="text-lg font-bold tracking-tight">
-            <span className="text-gradient">Rimu</span>tama
+            <span className="text-gradient">Almahira</span> Tech
           </a>
           <p className="text-sm text-muted-foreground mt-1">
             {t(f.tagline, lang)}
@@ -38,7 +38,7 @@ const Footer = () => {
         </div>
 
         <p className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Rimutama. {t(f.rights, lang)}
+          © {new Date().getFullYear()} Almahira Tech. {t(f.rights, lang)}
         </p>
       </div>
     </footer>
