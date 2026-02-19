@@ -149,6 +149,56 @@ export const translations = {
         },
         tech: ["Flutter", "Android", "Golang", "Next.js"],
       },
+      {
+        tag: "Enterprise",
+        title: { en: "Odoo Online Store", id: "Toko Online Odoo" },
+        client: { en: "Retail Business", id: "Bisnis Retail" },
+        description: {
+          en: "Full-featured Odoo e-commerce store with product catalog, payment gateway integration, inventory sync, and customer portal for seamless online shopping.",
+          id: "Toko e-commerce Odoo lengkap dengan katalog produk, integrasi payment gateway, sinkronisasi inventori, dan portal pelanggan untuk pengalaman belanja online yang mulus.",
+        },
+        tech: ["Odoo", "Python", "PostgreSQL", "XML"],
+      },
+      {
+        tag: "Public Sector",
+        title: { en: "Odoo School Management System", id: "Sistem Manajemen Sekolah Odoo" },
+        client: { en: "Educational Institution", id: "Institusi Pendidikan" },
+        description: {
+          en: "Comprehensive school ERP on Odoo covering student enrollment, academic scheduling, grade management, parent communication, and fee collection.",
+          id: "ERP sekolah komprehensif berbasis Odoo mencakup penerimaan siswa, penjadwalan akademik, manajemen nilai, komunikasi orang tua, dan pengelolaan biaya.",
+        },
+        tech: ["Odoo", "Python", "PostgreSQL", "XML"],
+      },
+      {
+        tag: "SaaS",
+        title: { en: "Odoo Clinic Management System", id: "Sistem Manajemen Klinik Odoo" },
+        client: { en: "Healthcare Provider", id: "Penyedia Layanan Kesehatan" },
+        description: {
+          en: "Odoo-based clinic system managing patient records, appointment scheduling, doctor queues, medical billing, and pharmacy inventory in a unified platform.",
+          id: "Sistem klinik berbasis Odoo yang mengelola rekam medis pasien, penjadwalan janji, antrian dokter, penagihan medis, dan inventori apotek dalam satu platform terpadu.",
+        },
+        tech: ["Odoo", "Python", "PostgreSQL", "XML"],
+      },
+      {
+        tag: "Enterprise",
+        title: { en: "Odoo HR & Payroll System", id: "Sistem HR & Penggajian Odoo" },
+        client: { en: "Corporate Client", id: "Klien Korporat" },
+        description: {
+          en: "End-to-end HR solution on Odoo covering employee onboarding, attendance tracking, leave management, performance appraisals, and automated payroll processing.",
+          id: "Solusi HR end-to-end di Odoo mencakup onboarding karyawan, absensi, manajemen cuti, penilaian kinerja, dan pemrosesan penggajian otomatis.",
+        },
+        tech: ["Odoo", "Python", "PostgreSQL", "XML"],
+      },
+      {
+        tag: "Enterprise",
+        title: { en: "Odoo Warehouse Management System", id: "Sistem Manajemen Gudang Odoo" },
+        client: { en: "Distribution Company", id: "Perusahaan Distribusi" },
+        description: {
+          en: "Odoo WMS with multi-warehouse support, barcode scanning, stock valuation, automated reordering, and real-time inventory tracking across locations.",
+          id: "WMS Odoo dengan dukungan multi-gudang, pemindaian barcode, penilaian stok, pemesanan ulang otomatis, dan pelacakan inventori real-time di berbagai lokasi.",
+        },
+        tech: ["Odoo", "Python", "PostgreSQL", "XML"],
+      },
     ],
   },
   tech: {
