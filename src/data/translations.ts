@@ -324,16 +324,6 @@ export const translations = {
         highlight: true,
       },
       {
-        year: "2024",
-        title: { en: "Government Portals & SaaS Products", id: "Portal Pemerintahan & Produk SaaS" },
-        description: {
-          en: "Built Gapura Surabaya — the official news portal for Surabaya City Government using Laravel. Launched Jetkios POS for small merchants, and a School Management System used by real schools. Continued enterprise InPonsel platform development with Golang & Next.js.",
-          id: "Membangun Gapura Surabaya — portal berita resmi Pemkot Surabaya menggunakan Laravel. Meluncurkan Jetkios POS untuk merchant UMKM, dan Sistem Manajemen Sekolah yang digunakan sekolah nyata. Melanjutkan pengembangan platform enterprise InPonsel dengan Golang & Next.js.",
-        },
-        tags: ["Laravel", "Nuxt.js", "PostgreSQL", "Golang"],
-        highlight: false,
-      },
-      {
         year: "2023",
         title: { en: "Almahira Tech — Unified Digital Solutions", id: "Almahira Tech — Solusi Digital Terpadu" },
         description: {
@@ -342,6 +332,16 @@ export const translations = {
         },
         tags: ["Golang", "Typesense", "Next.js", "Python", "Docker"],
         highlight: true,
+      },
+      {
+        year: "2024",
+        title: { en: "Government Portals & SaaS Products", id: "Portal Pemerintahan & Produk SaaS" },
+        description: {
+          en: "Built Gapura Surabaya — the official news portal for Surabaya City Government using Laravel. Launched Jetkios POS for small merchants, and a School Management System used by real schools. Continued enterprise InPonsel platform development with Golang & Next.js.",
+          id: "Membangun Gapura Surabaya — portal berita resmi Pemkot Surabaya menggunakan Laravel. Meluncurkan Jetkios POS untuk merchant UMKM, dan Sistem Manajemen Sekolah yang digunakan sekolah nyata. Melanjutkan pengembangan platform enterprise InPonsel dengan Golang & Next.js.",
+        },
+        tags: ["Laravel", "Nuxt.js", "PostgreSQL", "Golang"],
+        highlight: false,
       },
     ],
   },
