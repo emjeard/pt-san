@@ -152,12 +152,13 @@ export const translations = {
       {
         tag: "Enterprise",
         title: { en: "Odoo Online Store", id: "Toko Online Odoo" },
-        client: { en: "Retail Business", id: "Bisnis Retail" },
+        client: { en: "Retail Business (2019)", id: "Bisnis Retail (2019)" },
         description: {
           en: "Full-featured Odoo e-commerce store with product catalog, payment gateway integration, inventory sync, and customer portal for seamless online shopping.",
           id: "Toko e-commerce Odoo lengkap dengan katalog produk, integrasi payment gateway, sinkronisasi inventori, dan portal pelanggan untuk pengalaman belanja online yang mulus.",
         },
         tech: ["Odoo", "Python", "PostgreSQL", "XML"],
+        url: "https://multitoys.id/about-us",
       },
       {
         tag: "Public Sector",
