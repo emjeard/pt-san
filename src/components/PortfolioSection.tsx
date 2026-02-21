@@ -23,39 +23,51 @@ const PortfolioSection = () => {
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {port.projects.map((project, i) => (
-            <div
-              key={i}
-              className="group bg-card-gradient border border-border rounded-xl overflow-hidden hover:border-primary/30 transition-all duration-300"
-            >
-              <div className="h-1 bg-gradient-to-r from-primary to-primary/50" />
-              <div className="p-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <Badge
-                    variant="outline"
-                    className={`text-xs font-mono ${tagColors[project.tag] || ""}`}
-                  >
-                    {project.tag}
-                  </Badge>
-                  <span className="text-xs text-muted-foreground">{t(project.client, lang)}</span>
-                </div>
-                <h3 className="text-lg font-semibold mb-3">{t(project.title, lang)}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-5">
-                  {t(project.description, lang)}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {project.tech.map((item) => (
-                    <span
-                      key={item}
-                      className="px-2.5 py-1 rounded bg-secondary text-xs text-secondary-foreground font-mono"
+          {port.projects.map((project, i) => {
+            const Wrapper = ("url" in project && project.url) ? "a" : "div";
+            const wrapperProps = ("url" in project && project.url)
+              ? { href: project.url as string, target: "_blank", rel: "noopener noreferrer" }
+              : {};
+            return (
+              <Wrapper
+                key={i}
+                {...wrapperProps}
+                className="group bg-card-gradient border border-border rounded-xl overflow-hidden hover:border-primary/30 transition-all duration-300 block"
+              >
+                <div className="h-1 bg-gradient-to-r from-primary to-primary/50" />
+                <div className="p-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Badge
+                      variant="outline"
+                      className={`text-xs font-mono ${tagColors[project.tag] || ""}`}
                     >
-                      {item}
-                    </span>
-                  ))}
+                      {project.tag}
+                    </Badge>
+                    <span className="text-xs text-muted-foreground">{t(project.client, lang)}</span>
+                  </div>
+                  <h3 className="text-lg font-semibold mb-3">
+                    {t(project.title, lang)}
+                    {"url" in project && project.url && (
+                      <span className="ml-2 text-xs text-primary opacity-0 group-hover:opacity-100 transition-opacity">↗</span>
+                    )}
+                  </h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-5">
+                    {t(project.description, lang)}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {project.tech.map((item) => (
+                      <span
+                        key={item}
+                        className="px-2.5 py-1 rounded bg-secondary text-xs text-secondary-foreground font-mono"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              </Wrapper>
+            );
+          })}
         </div>
       </div>
     </section>
