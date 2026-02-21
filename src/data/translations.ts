@@ -334,7 +334,7 @@ export const translations = {
         highlight: false,
       },
       {
-        year: "2025",
+        year: "2023",
         title: { en: "Almahira Tech — Unified Digital Solutions", id: "Almahira Tech — Solusi Digital Terpadu" },
         description: {
           en: "Officially established Almahira Tech, combining 16+ years of enterprise and product expertise. Now building with Golang microservices, Typesense-powered search, and cloud-native architecture at Hedra.id and beyond — serving enterprises, governments, and startups across Indonesia.",
