@@ -221,7 +221,7 @@ export const translations = {
   },
   whyUs: {
     label: { en: "Why Us", id: "Mengapa Kami" },
-    title: { en: "Why Choose Almahira Tech", id: "Mengapa Memilih Almahira Tech" },
+    title: { en: "Why Choose SAN Solution", id: "Mengapa Memilih SAN Solution" },
     reasons: [
       {
         title: { en: "Proven Reliability", id: "Keandalan Terbukti" },
@@ -326,10 +326,10 @@ export const translations = {
       },
       {
         year: "2023",
-        title: { en: "Almahira Tech — Unified Digital Solutions", id: "Almahira Tech — Solusi Digital Terpadu" },
+        title: { en: "SAN Solution — Unified Digital Solutions", id: "SAN Solution — Solusi Digital Terpadu" },
         description: {
-          en: "Officially established Almahira Tech, combining 16+ years of enterprise and product expertise. Now building with Golang microservices, Typesense-powered search, and cloud-native architecture at Hedra.id and beyond — serving enterprises, governments, and startups across Indonesia.",
-          id: "Resmi mendirikan Almahira Tech, menggabungkan 16+ tahun keahlian enterprise dan produk. Kini membangun dengan microservices Golang, pencarian berbasis Typesense, dan arsitektur cloud-native di Hedra.id dan lainnya — melayani enterprise, pemerintah, dan startup di seluruh Indonesia.",
+          en: "Officially established SAN Solution, combining 16+ years of enterprise and product expertise. Now building with Golang microservices, Typesense-powered search, and cloud-native architecture at Hedra.id and beyond — serving enterprises, governments, and startups across Indonesia.",
+          id: "Resmi mendirikan SAN Solution, menggabungkan 16+ tahun keahlian enterprise dan produk. Kini membangun dengan microservices Golang, pencarian berbasis Typesense, dan arsitektur cloud-native di Hedra.id dan lainnya — melayani enterprise, pemerintah, dan startup di seluruh Indonesia.",
         },
         tags: ["Golang", "Typesense", "Next.js", "Python", "Docker"],
         highlight: true,
@@ -357,6 +357,8 @@ export const translations = {
     namePlaceholder: { en: "Your name", id: "Nama Anda" },
     email: { en: "Email", id: "Email" },
     emailPlaceholder: { en: "you@company.com", id: "anda@perusahaan.com" },
+    supportEmail: "support@sansolution.tech",
+    supportLabel: { en: "Or email us directly at", id: "Atau hubungi kami langsung di" },
     projectType: { en: "Project Type", id: "Jenis Proyek" },
     projectTypePlaceholder: {
       en: "e.g. Enterprise System, Mobile App, SaaS",

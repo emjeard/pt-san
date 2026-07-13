@@ -33,6 +33,12 @@ const ContactSection = () => {
           <p className="text-primary font-mono text-sm tracking-wider uppercase mb-3">{t(c.label, lang)}</p>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">{t(c.title, lang)}</h2>
           <p className="text-muted-foreground">{t(c.subtitle, lang)}</p>
+          <p className="text-sm text-muted-foreground mt-3">
+            {t(c.supportLabel, lang)}{" "}
+            <a href={`mailto:${c.supportEmail}`} className="text-primary hover:underline font-medium">
+              {c.supportEmail}
+            </a>
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5 bg-card-gradient border border-border rounded-xl p-8">
