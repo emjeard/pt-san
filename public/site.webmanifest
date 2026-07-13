@@ -1,0 +1,16 @@
+{
+  "name": "SAN Solution",
+  "short_name": "SAN",
+  "description": "Software house, digital product development, enterprise system development, and technology consulting.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2dd4bf",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}

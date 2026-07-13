@@ -10,8 +10,9 @@ const Footer = () => {
     <footer className="border-t border-border py-12 px-4">
       <div className="container-narrow flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
-          <a href="#" className="text-lg font-bold tracking-tight">
-            <span className="text-gradient">SAN</span> Solution
+          <a href="#" className="flex items-center justify-center md:justify-start gap-2 text-lg font-bold tracking-tight">
+            <img src="/logo.png" alt="SAN Solution Logo" className="h-8 w-auto rounded-md" />
+            <span><span className="text-gradient">SAN</span> Solution</span>
           </a>
           <p className="text-sm text-muted-foreground mt-1">
             {t(f.tagline, lang)}
