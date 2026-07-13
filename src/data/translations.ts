@@ -357,6 +357,8 @@ export const translations = {
     namePlaceholder: { en: "Your name", id: "Nama Anda" },
     email: { en: "Email", id: "Email" },
     emailPlaceholder: { en: "you@company.com", id: "anda@perusahaan.com" },
+    supportEmail: "support@sansolution.tech",
+    supportLabel: { en: "Or email us directly at", id: "Atau hubungi kami langsung di" },
     projectType: { en: "Project Type", id: "Jenis Proyek" },
     projectTypePlaceholder: {
       en: "e.g. Enterprise System, Mobile App, SaaS",
