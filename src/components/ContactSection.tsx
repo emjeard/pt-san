@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Send } from "lucide-react";
+import { Send, MessageCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations, t } from "@/data/translations";
+import { siteConfig } from "@/config/site";
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -37,6 +38,16 @@ const ContactSection = () => {
             {t(c.supportLabel, lang)}{" "}
             <a href={`mailto:${c.supportEmail}`} className="text-primary hover:underline font-medium">
               {c.supportEmail}
+            </a>
+            <span className="mx-2 text-border">|</span>
+            <a
+              href={`https://wa.me/${siteConfig.whatsappNumber.replace(/\D/g, "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline font-medium inline-flex items-center gap-1"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              {siteConfig.whatsappNumber}
             </a>
           </p>
         </div>

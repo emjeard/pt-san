@@ -374,6 +374,84 @@ export const translations = {
       id: "Kami akan menghubungi Anda dalam 24 jam.",
     },
   },
+  howWeWork: {
+    label: { en: "How We Work", id: "Cara Kami Bekerja" },
+    title: { en: "Our Process", id: "Proses Kami" },
+    subtitle: {
+      en: "A battle-tested approach to delivering reliable software.",
+      id: "Pendekatan teruji untuk menghadirkan software yang andal.",
+    },
+    steps: [
+      {
+        title: { en: "Discover", id: "Temukan" },
+        description: {
+          en: "We start by understanding your business, users, and technical constraints.",
+          id: "Kami memulai dengan memahami bisnis, pengguna, dan kendala teknis Anda.",
+        },
+      },
+      {
+        title: { en: "Design", id: "Rancang" },
+        description: {
+          en: "We architect scalable solutions with clear milestones and tech choices.",
+          id: "Kami merancang solusi yang skalabel dengan milestone jelas dan pilihan teknologi yang tepat.",
+        },
+      },
+      {
+        title: { en: "Build", id: "Bangun" },
+        description: {
+          en: "Iterative development with regular demos, code reviews, and quality gates.",
+          id: "Pengembangan iteratif dengan demo rutin, code review, dan quality gate.",
+        },
+      },
+      {
+        title: { en: "Deploy", id: "Deploy" },
+        description: {
+          en: "CI/CD pipelines, containerization, and production-ready infrastructure.",
+          id: "Pipeline CI/CD, containerization, dan infrastruktur siap production.",
+        },
+      },
+      {
+        title: { en: "Support", id: "Dukung" },
+        description: {
+          en: "Ongoing monitoring, maintenance, and continuous improvement after launch.",
+          id: "Monitoring berkelanjutan, pemeliharaan, dan perbaikan terus-menerus setelah launch.",
+        },
+      },
+    ],
+  },
+  expertise: {
+    label: { en: "Expertise", id: "Keahlian" },
+    title: { en: "Team Expertise", id: "Keahlian Tim" },
+    subtitle: {
+      en: "A balanced team covering product innovation and enterprise architecture.",
+      id: "Tim yang seimbang mencakup inovasi produk dan arsitektur enterprise.",
+    },
+    founders: [
+      {
+        title: { en: "Product & Innovation", id: "Produk & Inovasi" },
+        description: {
+          en: "8+ years of experience in Fullstack Development (Next.js, Golang, Python) & Mobile (Flutter). Built SaaS platforms and tourism apps. Pioneered AI-assisted development workflows for faster delivery.",
+          id: "8+ tahun pengalaman dalam Fullstack Development (Next.js, Golang, Python) & Mobile (Flutter). Membangun platform SaaS dan aplikasi pariwisata. Merintis workflow development berbasis AI untuk delivery yang lebih cepat.",
+        },
+        skills: ["Next.js", "Golang", "Flutter", "Python", "PostgreSQL"],
+      },
+      {
+        title: { en: "System Architecture & Enterprise", id: "Arsitektur Sistem & Enterprise" },
+        description: {
+          en: "15+ years building mission-critical enterprise systems with .NET/C# for major organizations including PLN, Pertamina, and Telkom. Specialist in Legacy System Modernization and High-Availability Infrastructure.",
+          id: "15+ tahun membangun sistem enterprise mission-critical dengan .NET/C# untuk organisasi besar termasuk PLN, Pertamina, dan Telkom. Spesialis dalam Modernisasi Legacy System dan Infrastruktur High-Availability.",
+        },
+        skills: [".NET Core", "C#", "SQL Server", "Docker", "Linux"],
+      },
+    ],
+  },
+  trust: {
+    stats: [
+      { value: "16+", label: { en: "Years of Experience", id: "Tahun Pengalaman" } },
+      { value: "50+", label: { en: "Projects Delivered", id: "Proyek Terdeliver" } },
+      { value: "99%", label: { en: "Uptime Track Record", id: "Track Record Uptime" } },
+    ],
+  },
   footer: {
     tagline: {
       en: "Engineering scalable digital solutions.",
