@@ -7,29 +7,21 @@ export const translations = {
     portfolio: { en: "Portfolio", id: "Portofolio" },
     tech: { en: "Tech", id: "Teknologi" },
     contact: { en: "Contact", id: "Kontak" },
-    getInTouch: { en: "Get in Touch", id: "Hubungi Kami" },
+    getInTouch: { en: "Discuss Your Needs", id: "Konsultasikan Kebutuhan Anda" },
   },
   hero: {
-    badge: { en: "Trusted by Enterprise & Startups", id: "Dipercaya oleh Enterprise & Startup" },
+    badge: { en: "Trusted by Enterprises & Organizations", id: "Dipercaya Enterprise & Organisasi" },
     headline: {
-      en: "Engineering Scalable Digital Solutions for Enterprises & Startups.",
-      id: "Rancang Bangun Solusi Digital Terukur untuk Korporasi & Startup.",
-    },
-    headlineHighlight: { en: "Digital Solutions", id: "Solusi Digital" },
-    headlineBefore: {
-      en: "Engineering Scalable ",
-      id: "Rancang Bangun ",
-    },
-    headlineAfter: {
-      en: " for Enterprises & Startups.",
-      id: " Terukur untuk Korporasi & Startup.",
+      en: "Build Websites, Apps, and Business Systems Ready to Grow.",
+      id: "Bangun Website, Aplikasi, dan Sistem Bisnis yang Siap Bertumbuh.",
     },
     subheadline: {
-      en: "Combining 16+ years of expertise in High-Performance Backend, Enterprise Systems, and Mobile Innovations.",
-      id: "Menggabungkan 16+ tahun pengalaman di Backend High-Performance, Sistem Enterprise, dan Inovasi Mobile.",
+      en: "SAN Solution helps companies, startups, and organizations design digital solutions that are easy to use, measurable, and aligned with business needs.",
+      id: "SAN Solution membantu perusahaan, startup, dan organisasi merancang solusi digital yang mudah digunakan, terukur, dan sesuai dengan kebutuhan bisnis.",
     },
-    ctaServices: { en: "Our Services", id: "Layanan Kami" },
-    ctaConsult: { en: "Book a Consultation", id: "Jadwalkan Konsultasi" },
+    ctaPrimary: { en: "Discuss Your Needs", id: "Konsultasikan Kebutuhan Anda" },
+    ctaSecondary: { en: "View Case Studies", id: "Lihat Studi Kasus" },
+    mockLabel: { en: "Illustrative dashboard preview", id: "Pratinjau dashboard ilustratif" },
   },
   about: {
     label: { en: "Who We Are", id: "Siapa Kami" },
@@ -206,8 +198,8 @@ export const translations = {
     label: { en: "Technology", id: "Teknologi" },
     title: { en: "Our Tech Stack", id: "Tech Stack Kami" },
     subtitle: {
-      en: "Battle-tested technologies powering enterprise-grade solutions.",
-      id: "Teknologi teruji yang mendukung solusi kelas enterprise.",
+      en: "We choose technologies based on your requirements and long-term maintainability — not popularity trends.",
+      id: "Kami memilih teknologi berdasarkan kebutuhan dan maintainability jangka panjang — bukan tren popularitas.",
     },
     categories: [
       { label: "Backend", items: ["Golang", "Python", "C# (.NET)", "PHP (Laravel)", "Java", "Node.js"] },
@@ -226,22 +218,22 @@ export const translations = {
       {
         title: { en: "Proven Reliability", id: "Keandalan Terbukti" },
         description: {
-          en: "Experience handling mission-critical systems for national companies like PLN, Pertamina, and Telkom — with 99%+ uptime track records.",
-          id: "Pengalaman menangani sistem mission-critical untuk perusahaan nasional seperti PLN, Pertamina, dan Telkom — dengan track record uptime 99%+.",
+          en: "Experience with mission-critical systems for organizations like PLN, Pertamina, and Telkom — with a documented 99%+ uptime track record in production environments (not a formal SLA guarantee).",
+          id: "Pengalaman dengan sistem mission-critical untuk organisasi seperti PLN, Pertamina, dan Telkom — dengan track record uptime 99%+ di lingkungan production (bukan jaminan SLA formal).",
         },
       },
       {
-        title: { en: "Speed & Innovation", id: "Kecepatan & Inovasi" },
+        title: { en: "Clear Communication", id: "Komunikasi yang Jelas" },
         description: {
-          en: "Utilizing AI-assisted coding workflows for faster delivery without compromising quality. Modern tooling meets veteran expertise.",
-          id: "Memanfaatkan workflow coding berbasis AI untuk delivery lebih cepat tanpa mengorbankan kualitas. Tooling modern bertemu keahlian veteran.",
+          en: "Regular demos, plain-language updates, and documentation you can hand to your team — so business and technical stakeholders stay aligned throughout the project.",
+          id: "Demo rutin, update dalam bahasa yang mudah dipahami, dan dokumentasi yang bisa diserahkan ke tim Anda — agar stakeholder bisnis dan teknis tetap selaras sepanjang proyek.",
         },
       },
       {
-        title: { en: "Scalable Architecture", id: "Arsitektur Skalabel" },
+        title: { en: "Maintainable Architecture", id: "Arsitektur yang Mudah Dirawat" },
         description: {
-          en: "Systems designed to handle growth from Day 1. Microservices, containerization, and cloud-native approaches built into every project.",
-          id: "Sistem yang dirancang untuk menangani pertumbuhan sejak Hari Pertama. Microservices, containerization, dan pendekatan cloud-native terintegrasi di setiap proyek.",
+          en: "Systems designed for growth and long-term maintainability — with clear structure, sensible tech choices, and patterns your team can extend after launch.",
+          id: "Sistem dirancang untuk pertumbuhan dan maintainability jangka panjang — dengan struktur jelas, pilihan teknologi masuk akal, dan pola yang bisa dikembangkan tim Anda setelah launch.",
         },
       },
     ],
@@ -366,12 +358,46 @@ export const translations = {
     },
     message: { en: "Message", id: "Pesan" },
     messagePlaceholder: { en: "Tell us about your project...", id: "Ceritakan tentang proyek Anda..." },
+    whatsapp: { en: "WhatsApp", id: "WhatsApp" },
+    whatsappPlaceholder: { en: "e.g. 081234567890", id: "contoh: 081234567890" },
+    emailOrWhatsapp: {
+      en: "Email or WhatsApp (at least one required)",
+      id: "Email atau WhatsApp (minimal satu diisi)",
+    },
+    company: { en: "Company (optional)", id: "Perusahaan (opsional)" },
+    companyPlaceholder: { en: "Your company name", id: "Nama perusahaan" },
+    projectStage: { en: "Project stage (optional)", id: "Tahap proyek (opsional)" },
+    projectStagePlaceholder: {
+      en: "e.g. Idea, MVP, existing product",
+      id: "contoh: Ide, MVP, produk existing",
+    },
     send: { en: "Send Message", id: "Kirim Pesan" },
     sending: { en: "Sending...", id: "Mengirim..." },
-    toastTitle: { en: "Message sent!", id: "Pesan terkirim!" },
-    toastDescription: {
+    successTitle: { en: "Message sent!", id: "Pesan terkirim!" },
+    successDescription: {
       en: "We'll get back to you within 24 hours.",
       id: "Kami akan menghubungi Anda dalam 24 jam.",
+    },
+    errorGeneric: {
+      en: "Something went wrong. Please try again or contact us via WhatsApp.",
+      id: "Terjadi kesalahan. Silakan coba lagi atau hubungi kami via WhatsApp.",
+    },
+    formDisabled: {
+      en: "Online form is not configured yet. Please contact us via WhatsApp or email.",
+      id: "Form online belum dikonfigurasi. Silakan hubungi kami via WhatsApp atau email.",
+    },
+    whatsappCta: { en: "Chat on WhatsApp", id: "Chat via WhatsApp" },
+    ctaBandTitle: {
+      en: "Ready to discuss your project?",
+      id: "Siap mendiskusikan proyek Anda?",
+    },
+    ctaBandSubtitle: {
+      en: "Tell us about your goals — we'll respond within one business day.",
+      id: "Ceritakan tujuan Anda — kami akan merespons dalam satu hari kerja.",
+    },
+    whatsappPrefill: {
+      en: "Hello SAN Solution, I would like to discuss a digital solution for my business.",
+      id: "Halo SAN Solution, saya ingin berkonsultasi mengenai kebutuhan digital untuk bisnis saya.",
     },
   },
   howWeWork: {
@@ -383,48 +409,48 @@ export const translations = {
     },
     steps: [
       {
-        title: { en: "Discover", id: "Temukan" },
+        title: { en: "Understanding", id: "Pemahaman" },
         description: {
-          en: "We start by understanding your business, users, and technical constraints.",
-          id: "Kami memulai dengan memahami bisnis, pengguna, dan kendala teknis Anda.",
+          en: "We map your business goals, users, existing systems, and constraints before proposing any solution.",
+          id: "Kami memetakan tujuan bisnis, pengguna, sistem existing, dan kendala sebelum mengusulkan solusi apapun.",
         },
       },
       {
-        title: { en: "Design", id: "Rancang" },
+        title: { en: "Planning", id: "Perencanaan" },
         description: {
-          en: "We architect scalable solutions with clear milestones and tech choices.",
-          id: "Kami merancang solusi yang skalabel dengan milestone jelas dan pilihan teknologi yang tepat.",
+          en: "Scope, milestones, priorities, and technical approach are defined together — with clear communication on trade-offs.",
+          id: "Scope, milestone, prioritas, dan pendekatan teknis ditentukan bersama — dengan komunikasi jelas tentang trade-off.",
         },
       },
       {
-        title: { en: "Build", id: "Bangun" },
+        title: { en: "Design & Development", id: "Desain & Pengembangan" },
         description: {
-          en: "Iterative development with regular demos, code reviews, and quality gates.",
-          id: "Pengembangan iteratif dengan demo rutin, code review, dan quality gate.",
+          en: "Iterative build with regular demos, structured code, and decisions documented for your team.",
+          id: "Pengembangan iteratif dengan demo rutin, kode terstruktur, dan keputusan terdokumentasi untuk tim Anda.",
         },
       },
       {
-        title: { en: "Deploy", id: "Deploy" },
+        title: { en: "Testing & Review", id: "Pengujian & Review" },
         description: {
-          en: "CI/CD pipelines, containerization, and production-ready infrastructure.",
-          id: "Pipeline CI/CD, containerization, dan infrastruktur siap production.",
+          en: "Functional testing, performance checks, and stakeholder review before anything goes to production.",
+          id: "Pengujian fungsional, pengecekan performa, dan review stakeholder sebelum apapun masuk production.",
         },
       },
       {
-        title: { en: "Support", id: "Dukung" },
+        title: { en: "Launch & Support", id: "Peluncuran & Dukungan" },
         description: {
-          en: "Ongoing monitoring, maintenance, and continuous improvement after launch.",
-          id: "Monitoring berkelanjutan, pemeliharaan, dan perbaikan terus-menerus setelah launch.",
+          en: "Production deployment, handover documentation, monitoring recommendations, and post-launch support options.",
+          id: "Deployment production, dokumentasi handover, rekomendasi monitoring, dan opsi dukungan pasca-launch.",
         },
       },
     ],
   },
   expertise: {
     label: { en: "Expertise", id: "Keahlian" },
-    title: { en: "Team Expertise", id: "Keahlian Tim" },
+    title: { en: "Complementary Expertise", id: "Keahlian yang Saling Melengkapi" },
     subtitle: {
-      en: "A balanced team covering product innovation and enterprise architecture.",
-      id: "Tim yang seimbang mencakup inovasi produk dan arsitektur enterprise.",
+      en: "Product innovation and enterprise architecture — two skill sets that cover the full lifecycle of your digital solution.",
+      id: "Inovasi produk dan arsitektur enterprise — dua keahlian yang melengkapi siklus hidup solusi digital Anda.",
     },
     founders: [
       {
@@ -446,16 +472,41 @@ export const translations = {
     ],
   },
   trust: {
-    stats: [
-      { value: "16+", label: { en: "Years of Experience", id: "Tahun Pengalaman" } },
-      { value: "50+", label: { en: "Projects Delivered", id: "Proyek Terdeliver" } },
-      { value: "99%", label: { en: "Uptime Track Record", id: "Track Record Uptime" } },
+    items: [
+      {
+        title: { en: "16+ Years of Experience", id: "16+ Tahun Pengalaman" },
+        description: {
+          en: "Enterprise systems, mobile apps, and digital products delivered across Indonesia since 2009.",
+          id: "Sistem enterprise, aplikasi mobile, dan produk digital di seluruh Indonesia sejak 2009.",
+        },
+      },
+      {
+        title: { en: "Enterprise & Government", id: "Enterprise & Pemerintahan" },
+        description: {
+          en: "Mission-critical projects for organizations including PLN, Pertamina, Telkom, and public institutions.",
+          id: "Proyek mission-critical untuk organisasi termasuk PLN, Pertamina, Telkom, dan institusi publik.",
+        },
+      },
+      {
+        title: { en: "SaaS & Mobile Products", id: "Produk SaaS & Mobile" },
+        description: {
+          en: "From MVP platforms to Play Store & App Store apps — built for real users and business operations.",
+          id: "Dari platform MVP hingga aplikasi Play Store & App Store — dibangun untuk pengguna nyata dan operasional bisnis.",
+        },
+      },
+      {
+        title: { en: "Scalable Systems", id: "Sistem yang Skalabel" },
+        description: {
+          en: "Architecture designed for growth, maintainability, and long-term operational reliability.",
+          id: "Arsitektur dirancang untuk pertumbuhan, maintainability, dan keandalan operasional jangka panjang.",
+        },
+      },
     ],
   },
   footer: {
     tagline: {
-      en: "Engineering scalable digital solutions.",
-      id: "Merancang solusi digital yang skalabel.",
+      en: "Digital solutions built for clarity, scale, and maintainability.",
+      id: "Solusi digital yang dirancang untuk kejelasan, skala, dan kemudahan perawatan.",
     },
     rights: {
       en: "All rights reserved.",

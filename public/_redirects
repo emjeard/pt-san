@@ -1,0 +1,7 @@
+# SPA fallback — Netlify / compatible static hosts
+/*    /index.html   200
+
+# Force www (if apex also points here; prefer DNS-level 301 when possible)
+https://sansolution.tech/*  https://www.sansolution.tech/:splat  301!
+http://sansolution.tech/*   https://www.sansolution.tech/:splat  301!
+http://www.sansolution.tech/*  https://www.sansolution.tech/:splat  301!
