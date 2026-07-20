@@ -4,6 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Reveal } from "@/components/ui-custom/Reveal";
 import { SectionHeading } from "@/components/ui-custom/SectionHeading";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { faqSection, homepageFaq } from "@/data/faq";
@@ -42,12 +43,13 @@ const FAQSection = () => {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
 
-        <Accordion
-          type="single"
-          collapsible
-          className="rounded-2xl border border-border bg-white px-6 shadow-sm"
-          aria-label={t(faqSection.title, lang)}
-        >
+        <Reveal>
+          <Accordion
+            type="single"
+            collapsible
+            className="rounded-2xl border border-border bg-white px-6 shadow-sm"
+            aria-label={t(faqSection.title, lang)}
+          >
           {homepageFaq.map((item) => (
             <AccordionItem key={item.id} value={item.id}>
               <AccordionTrigger
@@ -65,7 +67,8 @@ const FAQSection = () => {
               </AccordionContent>
             </AccordionItem>
           ))}
-        </Accordion>
+          </Accordion>
+        </Reveal>
 
         <p className="sr-only">
           {lang === "id"

@@ -38,7 +38,7 @@ const organizationJsonLd = {
     "SAN Solution membantu perusahaan, startup, dan organisasi membangun sistem enterprise, produk SaaS, aplikasi mobile, website, dan solusi digital yang siap berkembang.",
   foundingDate: "2023",
   areaServed: "Indonesia",
-  email: "support@sansolution.tech",
+  email: "kontak@sansolution.tech",
 };
 
 export type HomePageProps = {

@@ -176,6 +176,34 @@
     animation: fadeUp 0.22s ease-out 0.15s forwards;
     opacity: 0;
   }
+
+  /* Scroll-triggered reveals (Intersection Observer via Reveal component) */
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.22s ease-out,
+      transform 0.22s ease-out;
+    will-change: opacity, transform;
+  }
+
+  .reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-scale {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+    transition:
+      opacity 0.22s ease-out,
+      transform 0.22s ease-out;
+  }
+
+  .reveal-scale.reveal-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes fadeUp {
@@ -193,9 +221,13 @@
   .animate-fade-up,
   .animate-fade-up-delay-1,
   .animate-fade-up-delay-2,
-  .animate-fade-up-delay-3 {
+  .animate-fade-up-delay-3,
+  .reveal,
+  .reveal-scale {
     animation: none;
     opacity: 1;
     transform: none;
+    transition: none;
+    will-change: auto;
   }
 }

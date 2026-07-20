@@ -53,18 +53,25 @@ cp .env.example .env
 | Variable | Format | Purpose |
 |----------|--------|---------|
 | `VITE_SITE_URL` | `https://www.sansolution.tech` | Canonical site URL |
-| `VITE_CONTACT_ENDPOINT` | HTTPS URL (Formspree/Getform/custom) | Contact form POST destination |
-| `VITE_CONTACT_EMAIL` | email address | Display / fallback email |
+| `VITE_CONTACT_ENDPOINT` | `/api/contact` (default) | Contact form POST destination |
+| `VITE_CONTACT_EMAIL` | `kontak@sansolution.tech` | Display / mailto email |
 | `VITE_WHATSAPP_NUMBER` | Digits only, e.g. `628568862327` | WhatsApp Business number |
 | `VITE_GA_MEASUREMENT_ID` | `G-XXXXXXXXXX` | Optional GA4 ID |
+| `RESEND_API_KEY` | Resend secret key | **Server-only** — sends form emails |
+| `CONTACT_TO_EMAIL` | `kontak@sansolution.tech` | Inbox for form submissions |
+| `RESEND_FROM_EMAIL` | `SAN Solution <kontak@sansolution.tech>` | Verified Resend sender |
 
-### Contact form setup
+### Contact form setup (Resend)
 
-1. Create a Formspree / Getform / custom endpoint that accepts JSON POST.
-2. Set `VITE_CONTACT_ENDPOINT` to that URL.
-3. Until configured, the form stays disabled and WhatsApp/email fallbacks are shown.
-4. Success UI appears **only** after a successful HTTP response.
-5. Client spam protection: honeypot field + minimum form-fill time.
+1. Create an account at [resend.com](https://resend.com) and verify the `sansolution.tech` domain.
+2. Create an API key and set `RESEND_API_KEY` in Netlify (Site settings → Environment variables) and in local `.env`.
+3. Set `CONTACT_TO_EMAIL=kontak@sansolution.tech` and a verified `RESEND_FROM_EMAIL`.
+4. Production uses Netlify Function at `/api/contact` → `/.netlify/functions/contact`.
+5. Local `npm run dev` serves the same path via Vite middleware.
+6. Success UI appears **only** after Resend accepts the message.
+7. Spam protection: honeypot + minimum form-fill time (client and server).
+
+Never expose `RESEND_API_KEY` with a `VITE_` prefix.
 
 ---
 

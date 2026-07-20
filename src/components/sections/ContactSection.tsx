@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Reveal } from "@/components/ui-custom/Reveal";
 import { SectionHeading } from "@/components/ui-custom/SectionHeading";
 import { getWhatsAppUrl, siteConfig } from "@/config/site";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -133,7 +134,8 @@ const ContactSection = () => {
   return (
     <section id="contact" className="section-padding">
       <div className="container-narrow max-w-3xl">
-        <div className="mb-10 overflow-hidden rounded-2xl bg-darksection px-8 py-10 text-center text-white">
+        <Reveal>
+          <div className="mb-10 overflow-hidden rounded-2xl bg-darksection px-8 py-10 text-center text-white">
           <h2 className="font-heading text-2xl font-bold md:text-3xl">
             {t(c.ctaBandTitle, lang)}
           </h2>
@@ -154,7 +156,8 @@ const ContactSection = () => {
               </a>
             </Button>
           ) : null}
-        </div>
+          </div>
+        </Reveal>
 
         <SectionHeading
           label={t(c.label, lang)}
@@ -167,11 +170,11 @@ const ContactSection = () => {
         <p className="mb-8 text-center text-sm text-muted-foreground">
           {t(c.supportLabel, lang)}{" "}
           <a
-            href={`mailto:${c.supportEmail}`}
+            href={`mailto:${siteConfig.contact.email}`}
             className="font-medium text-primary hover:underline"
             onClick={() => trackEvent("email_contact_click", { location: "contact_support" })}
           >
-            {c.supportEmail}
+            {siteConfig.contact.email}
           </a>
           {siteConfig.contact.whatsappDisplay ? (
             <>
@@ -201,6 +204,7 @@ const ContactSection = () => {
           </div>
         ) : null}
 
+        <Reveal delay={80}>
         <form
           onSubmit={handleSubmit}
           className="space-y-5 rounded-2xl border border-border bg-white p-8 shadow-sm"
@@ -378,6 +382,7 @@ const ContactSection = () => {
             </Button>
           ) : null}
         </form>
+        </Reveal>
       </div>
     </section>
   );

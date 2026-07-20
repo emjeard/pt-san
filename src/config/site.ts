@@ -7,15 +7,22 @@ export const siteConfig = {
 
   contact: {
     /** Business email — only render when configured */
-    email: "support@sansolution.tech",
+    email:
+      import.meta.env.VITE_CONTACT_EMAIL?.trim() || "kontak@sansolution.tech",
     /**
      * WhatsApp in international format without + (e.g. 628568862327).
      * Display number may differ for local formatting.
      */
-    whatsappNumber: "628568862327",
+    whatsappNumber:
+      import.meta.env.VITE_WHATSAPP_NUMBER?.replace(/\D/g, "").trim() ||
+      "628568862327",
     whatsappDisplay: "0856-8862-327",
-    /** Formspree / Getform / custom API URL. Empty = form disabled until configured. */
-    formEndpoint: import.meta.env.VITE_CONTACT_ENDPOINT?.trim() || "",
+    /**
+     * Contact form POST destination.
+     * Defaults to /api/contact (Vite middleware locally, Netlify Function in production).
+     */
+    formEndpoint:
+      import.meta.env.VITE_CONTACT_ENDPOINT?.trim() || "/api/contact",
   },
 
   social: {

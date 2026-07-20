@@ -1,3 +1,4 @@
+import { Reveal } from "@/components/ui-custom/Reveal";
 import { SectionHeading } from "@/components/ui-custom/SectionHeading";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations, t } from "@/data/translations";
@@ -28,9 +29,11 @@ const TimelineSection = () => {
               const isLeft = index % 2 === 0;
 
               return (
-                <li
+                <Reveal
                   key={milestone.year}
-                  className={`relative md:flex md:items-start ${
+                  as="li"
+                  delay={Math.min(index * 40, 160)}
+                  className={`relative list-none md:flex md:items-start ${
                     isLeft ? "md:flex-row" : "md:flex-row-reverse"
                   }`}
                 >
@@ -82,7 +85,7 @@ const TimelineSection = () => {
                   </div>
 
                   <div className="hidden md:block md:w-1/2" aria-hidden="true" />
-                </li>
+                </Reveal>
               );
             })}
           </ol>

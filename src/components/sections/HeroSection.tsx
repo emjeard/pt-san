@@ -1,10 +1,11 @@
-import { ArrowRight, LayoutDashboard } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations, t } from "@/data/translations";
 import { routeFor } from "@/lib/routes";
 import { trackEvent } from "@/lib/analytics";
+import heroDashboard from "@/assets/hero-dashboard-preview.webp";
 
 const HeroSection = () => {
   const { lang } = useLanguage();
@@ -50,48 +51,27 @@ const HeroSection = () => {
           </div>
 
           <div className="animate-fade-up-delay-2 mx-auto w-full max-w-lg lg:max-w-none">
-            <div
-              className="rounded-2xl border border-border bg-white/90 p-4 shadow-soft"
-              aria-hidden="true"
-            >
-              <p className="mb-3 text-center text-xs text-muted-foreground">
-                {t(hero.mockLabel, lang)}
-              </p>
-              <div className="overflow-hidden rounded-xl border border-border bg-softmint/40">
-                <div className="flex items-center gap-2 border-b border-border bg-white px-4 py-3">
-                  <LayoutDashboard className="h-4 w-4 text-primary" />
-                  <div className="h-2 w-24 rounded bg-muted" />
-                  <div className="ml-auto flex gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-border" />
-                    <span className="h-2 w-2 rounded-full bg-border" />
-                    <span className="h-2 w-2 rounded-full bg-border" />
-                  </div>
-                </div>
-                <div className="grid gap-3 p-4 sm:grid-cols-3">
-                  {[1, 2, 3].map((item) => (
-                    <div key={item} className="rounded-lg border border-border bg-white p-3">
-                      <div className="mb-2 h-2 w-12 rounded bg-primary/20" />
-                      <div className="h-6 w-16 rounded bg-muted" />
-                    </div>
-                  ))}
-                </div>
-                <div className="border-t border-border bg-white p-4">
-                  <div className="mb-2 flex justify-between">
-                    <div className="h-2 w-20 rounded bg-muted" />
-                    <div className="h-2 w-10 rounded bg-primary/30" />
-                  </div>
-                  <div className="space-y-2">
-                    {[72, 48, 86, 54].map((width) => (
-                      <div
-                        key={width}
-                        className="h-2 rounded bg-secondary"
-                        style={{ width: `${width}%` }}
-                      />
-                    ))}
-                  </div>
-                </div>
+            <figure className="relative">
+              <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-primary/10 via-softmint/60 to-transparent blur-2xl" aria-hidden="true" />
+              <div className="relative overflow-hidden rounded-2xl border border-border bg-white/90 p-2 shadow-soft sm:p-3">
+                <img
+                  src={heroDashboard}
+                  alt={
+                    lang === "id"
+                      ? "Ilustrasi dashboard bisnis SAN Solution dengan grafik dan ringkasan operasional"
+                      : "Illustrative SAN Solution business dashboard with charts and operational summary"
+                  }
+                  width={1400}
+                  height={1050}
+                  fetchPriority="high"
+                  decoding="async"
+                  className="h-auto w-full rounded-xl object-cover"
+                />
+                <figcaption className="absolute bottom-4 left-1/2 z-10 -translate-x-1/2 rounded-full border border-border/80 bg-white/90 px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur-sm">
+                  {t(hero.mockLabel, lang)}
+                </figcaption>
               </div>
-            </div>
+            </figure>
           </div>
         </div>
       </div>

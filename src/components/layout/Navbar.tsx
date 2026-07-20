@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu } from "lucide-react";
 import type { SiteLocale } from "@/config/site";
@@ -56,11 +56,19 @@ export const Navbar = ({
   enPath = routes.home.en,
 }: NavbarProps) => {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const mobileMenuId = useId();
   const items = buildNavItems(locale);
   const homeHref = routeFor("home", locale);
   const contactHref = routeFor("contact", locale);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const handleOpenChange = (next: boolean) => {
     setOpen(next);
@@ -76,7 +84,14 @@ export const Navbar = ({
   const closeMobile = () => setOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-card/95 backdrop-blur-sm">
+    <header
+      className={cn(
+        "sticky top-0 z-50 border-b bg-card/95 backdrop-blur-sm transition-[border-color,box-shadow,background-color] duration-200",
+        scrolled
+          ? "border-border shadow-sm bg-card/98"
+          : "border-border/60",
+      )}
+    >
       <div className="container-narrow flex h-16 items-center justify-between gap-4 px-4 md:px-6">
         <Link
           to={homeHref}

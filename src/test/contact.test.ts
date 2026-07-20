@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import {
   validateContactForm,
   isContactFormConfigured,
@@ -58,14 +58,26 @@ describe("contact form validation", () => {
 
 describe("contact form submission", () => {
   beforeEach(() => {
-    vi.unstubAllEnvs();
+    vi.restoreAllMocks();
   });
 
-  it("reports when endpoint is not configured", () => {
-    expect(isContactFormConfigured()).toBe(false);
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
-  it("throws a clear error when endpoint is missing", async () => {
+  it("uses the default /api/contact endpoint", () => {
+    expect(isContactFormConfigured()).toBe(true);
+  });
+
+  it("shows success only after a successful response", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ ok: true }),
+      }),
+    );
+
     await expect(
       submitContactForm({
         name: "Ayu",
@@ -74,6 +86,34 @@ describe("contact form submission", () => {
         message: "Hello",
         formStartedAt: Date.now() - 5000,
       }),
-    ).rejects.toThrow(/not configured/i);
+    ).resolves.toEqual({ ok: true });
+
+    expect(fetch).toHaveBeenCalledWith(
+      "/api/contact",
+      expect.objectContaining({ method: "POST" }),
+    );
+  });
+
+  it("preserves a useful error when the API fails", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 502,
+        json: async () => ({
+          error: "Failed to send message. Please try again or contact us via WhatsApp.",
+        }),
+      }),
+    );
+
+    await expect(
+      submitContactForm({
+        name: "Ayu",
+        email: "ayu@example.com",
+        projectType: "Website",
+        message: "Hello",
+        formStartedAt: Date.now() - 5000,
+      }),
+    ).rejects.toThrow(/Failed to send message/i);
   });
 });

@@ -1,4 +1,5 @@
 # SPA fallback — Netlify / compatible static hosts
+/api/contact  /.netlify/functions/contact  200
 /*    /index.html   200
 
 # Force www (if apex also points here; prefer DNS-level 301 when possible)

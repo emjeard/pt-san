@@ -74,15 +74,16 @@ export const validateContactForm = (
 const getFormEndpoint = (): string =>
   siteConfig.contact.formEndpoint ||
   import.meta.env.VITE_CONTACT_ENDPOINT?.trim() ||
-  "";
+  "/api/contact";
 
-const buildPayload = (data: ContactFormData): Record<string, string> => {
-  const payload: Record<string, string> = {
+const buildPayload = (data: ContactFormData): Record<string, unknown> => {
+  const payload: Record<string, unknown> = {
     name: data.name.trim(),
     email: data.email.trim(),
     projectType: data.projectType.trim(),
     message: data.message.trim(),
-    _subject: `SAN Solution inquiry — ${data.projectType.trim()}`,
+    website: data.website?.trim() || "",
+    formStartedAt: data.formStartedAt,
   };
 
   if (data.whatsapp?.trim()) payload.whatsapp = data.whatsapp.trim();
@@ -96,8 +97,8 @@ const buildPayload = (data: ContactFormData): Record<string, string> => {
 };
 
 /**
- * Submit the contact form to the configured endpoint.
- * Throws if no endpoint is configured — caller should offer WhatsApp fallback.
+ * Submit the contact form to /api/contact (Resend via Netlify Function / Vite middleware).
+ * Success is returned only after a successful HTTP response.
  */
 export const submitContactForm = async (
   data: ContactFormData,
@@ -109,11 +110,6 @@ export const submitContactForm = async (
   }
 
   const endpoint = getFormEndpoint();
-  if (!endpoint) {
-    throw new Error(
-      "Contact form endpoint is not configured. Please reach us via WhatsApp or email instead.",
-    );
-  }
 
   const response = await fetch(endpoint, {
     method: "POST",
@@ -124,15 +120,24 @@ export const submitContactForm = async (
     body: JSON.stringify(buildPayload(data)),
   });
 
+  let body: { ok?: boolean; error?: string } = {};
+  try {
+    body = await response.json();
+  } catch {
+    // ignore non-JSON
+  }
+
   if (!response.ok) {
     throw new Error(
-      `Submission failed (${response.status}). Please try again or contact us via WhatsApp.`,
+      body.error ||
+        `Submission failed (${response.status}). Please try again or contact us via WhatsApp.`,
     );
   }
 
   return { ok: true };
 };
 
+/** Form is always available via /api/contact; delivery depends on RESEND_API_KEY on the server. */
 export const isContactFormConfigured = (): boolean => Boolean(getFormEndpoint());
 
 export const getContactFormFallbackMessage = (): string => {
@@ -145,5 +150,5 @@ export const getContactFormFallbackMessage = (): string => {
 
   return parts.length > 0
     ? parts.join(" | ")
-    : "Please configure VITE_CONTACT_ENDPOINT or use direct contact channels.";
+    : "Please reach us via WhatsApp or email.";
 };

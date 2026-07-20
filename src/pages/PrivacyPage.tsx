@@ -79,7 +79,7 @@ const PrivacyPage = ({ locale }: PrivacyPageProps) => {
                 <h3>Formulir kontak</h3>
                 <p>
                   {formConfigured
-                    ? "Jika Anda mengirim formulir kontak, kami menerima data yang Anda isi — seperti nama, email, nomor WhatsApp (jika diisi), perusahaan, jenis proyek, dan pesan. Data ini dikirim ke layanan formulir pihak ketiga yang kami konfigurasi untuk menerima permintaan kontak."
+                    ? "Jika Anda mengirim formulir kontak, kami menerima data yang Anda isi — seperti nama, email, nomor WhatsApp (jika diisi), perusahaan, jenis proyek, dan pesan. Pesan dikirim melalui Resend ke kontak@sansolution.tech agar tim kami dapat merespons permintaan Anda."
                     : "Formulir kontak di website ini saat ini tidak aktif. Jika formulir diaktifkan di masa depan, data yang Anda kirim (seperti nama, email, dan pesan) akan diproses untuk merespons permintaan Anda."}
                 </p>
                 <h3>Analitik</h3>
@@ -168,7 +168,7 @@ const PrivacyPage = ({ locale }: PrivacyPageProps) => {
                 <h3>Contact form</h3>
                 <p>
                   {formConfigured
-                    ? "If you submit the contact form, we receive the data you provide — such as name, email, WhatsApp number (if provided), company, project type, and message. This data is sent to a third-party form service configured to receive contact requests."
+                    ? "If you submit the contact form, we receive the data you provide — such as name, email, WhatsApp number (if provided), company, project type, and message. Messages are delivered through Resend to kontak@sansolution.tech so our team can respond to your request."
                     : "The contact form on this website is currently inactive. If enabled in the future, data you submit (such as name, email, and message) will be processed to respond to your request."}
                 </p>
                 <h3>Analytics</h3>
