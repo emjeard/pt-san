@@ -58,6 +58,9 @@ cp .env.example .env
 | `VITE_WHATSAPP_NUMBER` | Digits only, e.g. `628568862327` | WhatsApp Business number |
 | `VITE_GA_MEASUREMENT_ID` | `G-XXXXXXXXXX` | Optional GA4 ID |
 | `RESEND_API_KEY` | Resend secret key | **Server-only** — sends form emails |
+| `DATABASE_URL` | Neon PostgreSQL connection string | **Server-only** — blog article storage |
+| `BLOG_ADMIN_PASSWORD` | Strong dashboard password | **Server-only** — `/dashboard/blog` login |
+| `BLOG_SESSION_SECRET` | Random 32+ byte signing secret | **Server-only** — signs the admin cookie |
 | `CONTACT_TO_EMAIL` | `kontak@sansolution.tech` | Inbox for form submissions |
 | `RESEND_FROM_EMAIL` | `SAN Solution <kontak@sansolution.tech>` | Verified Resend sender |
 
@@ -72,6 +75,17 @@ cp .env.example .env
 7. Spam protection: honeypot + minimum form-fill time (client and server).
 
 Never expose `RESEND_API_KEY` with a `VITE_` prefix.
+
+## Blog and article dashboard
+
+The public `/blog` and `/blog/:slug` pages read published articles from NeonDB through `/api/blog/articles`. Article management is available at `/dashboard/blog`; drafts are only returned by authenticated admin endpoints.
+
+1. Set `DATABASE_URL`, `BLOG_ADMIN_PASSWORD`, and `BLOG_SESSION_SECRET` in `.env` and in Netlify environment variables.
+2. Generate a session secret with `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"`.
+3. Apply the idempotent table migration and seed the original static articles with `npm run db:blog:migrate`.
+4. Use `npm run dev` locally, or `netlify dev` when testing the production-style function redirects.
+
+The admin password and session secret must never use a `VITE_` prefix. The browser receives only a signed, `HttpOnly`, `SameSite=Strict` session cookie.
 
 ---
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { AlertCircle, Loader2, Search } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import type { SiteLocale } from "@/config/site";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
@@ -7,8 +8,8 @@ import { SEOHead } from "@/components/seo/SEOHead";
 import { BlogPostCard } from "@/components/ui-custom/BlogPostCard";
 import { SectionHeading } from "@/components/ui-custom/SectionHeading";
 import { Input } from "@/components/ui/input";
-import { blogPosts } from "@/data/blogPosts";
 import { t } from "@/data/translations";
+import { fetchPublishedArticles } from "@/lib/blog";
 import { routeFor, routes } from "@/lib/routes";
 
 const pageCopy = {
@@ -23,6 +24,7 @@ const pageCopy = {
     blog: "Blog",
     searchPlaceholder: "Cari artikel, topik, atau kata kunci...",
     noResults: "Tidak ada artikel yang cocok dengan pencarian Anda.",
+    loadError: "Artikel belum dapat dimuat. Silakan coba lagi beberapa saat.",
   },
   en: {
     title: "Blog & Technology Insights | SAN Solution",
@@ -35,6 +37,7 @@ const pageCopy = {
     blog: "Blog",
     searchPlaceholder: "Search articles, topics, or keywords...",
     noResults: "No articles found matching your search.",
+    loadError: "Articles could not be loaded. Please try again shortly.",
   },
 } as const;
 
@@ -45,6 +48,14 @@ export type BlogIndexPageProps = {
 const BlogIndexPage = ({ locale }: BlogIndexPageProps) => {
   const copy = pageCopy[locale];
   const [searchQuery, setSearchQuery] = useState("");
+  const {
+    data: blogPosts = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["blog", "published-articles"],
+    queryFn: fetchPublishedArticles,
+  });
 
   const filteredPosts = blogPosts.filter((post) => {
     const titleText = t(post.title, locale).toLowerCase();
@@ -103,7 +114,17 @@ const BlogIndexPage = ({ locale }: BlogIndexPageProps) => {
             />
           </div>
 
-          {filteredPosts.length > 0 ? (
+          {isLoading ? (
+            <div className="flex min-h-48 items-center justify-center text-muted-foreground">
+              <Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden="true" />
+              <span>{locale === "id" ? "Memuat artikel..." : "Loading articles..."}</span>
+            </div>
+          ) : isError ? (
+            <div className="flex items-center justify-center gap-3 rounded-2xl border border-destructive/30 bg-destructive/5 p-8 text-center text-destructive">
+              <AlertCircle className="h-5 w-5 shrink-0" aria-hidden="true" />
+              <p className="text-sm font-medium">{copy.loadError}</p>
+            </div>
+          ) : filteredPosts.length > 0 ? (
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
               {filteredPosts.map((post) => (
                 <BlogPostCard key={post.id} post={post} locale={locale} />

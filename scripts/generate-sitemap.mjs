@@ -3,9 +3,10 @@
  * Generates public/sitemap.xml for www.sansolution.tech
  * Run: npm run sitemap
  */
-import { writeFileSync, statSync } from "node:fs";
+import { readFileSync, writeFileSync, statSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { neon } from "@neondatabase/serverless";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -82,7 +83,7 @@ const caseStudySlugs = {
   ],
 };
 
-const blogSlugs = {
+const fallbackBlogSlugs = {
   id: [
     "panduan-implementasi-odoo-erp-indonesia",
     "arsitektur-sistem-enterprise-scalable-aman",
@@ -93,6 +94,41 @@ const blogSlugs = {
     "scalable-secure-enterprise-system-architecture",
     "b2b-saas-product-development-strategy",
   ],
+};
+
+const loadLocalDatabaseUrl = () => {
+  if (process.env.DATABASE_URL) return process.env.DATABASE_URL;
+  try {
+    const line = readFileSync(join(root, ".env"), "utf8")
+      .split(/\r?\n/)
+      .find((value) => /^\s*DATABASE_URL\s*=/.test(value));
+    return line?.split("=").slice(1).join("=").trim();
+  } catch {
+    return undefined;
+  }
+};
+
+const getBlogSlugs = async () => {
+  const databaseUrl = loadLocalDatabaseUrl();
+  if (!databaseUrl) return fallbackBlogSlugs;
+  try {
+    const sql = neon(databaseUrl);
+    const rows = await sql.query(
+      `SELECT slug_id, slug_en
+       FROM blog_articles
+       WHERE status = 'published' AND published_at <= CURRENT_DATE
+       ORDER BY published_at DESC`,
+      [],
+    );
+    if (!rows.length) return fallbackBlogSlugs;
+    return {
+      id: rows.map((row) => row.slug_id),
+      en: rows.map((row) => row.slug_en),
+    };
+  } catch (error) {
+    console.warn(`Blog sitemap fallback: ${error instanceof Error ? error.message : error}`);
+    return fallbackBlogSlugs;
+  }
 };
 
 const formatDate = (date) => date.toISOString().slice(0, 10);
@@ -106,7 +142,7 @@ const getLastmod = () => {
   }
 };
 
-const buildPaths = () => {
+const buildPaths = (blogSlugs) => {
   const paths = [...staticRoutes.id, ...staticRoutes.en];
 
   for (const slug of serviceSlugs.id) {
@@ -136,8 +172,10 @@ const toLoc = (path) => {
   return `${SITE_URL}${path}`;
 };
 
+const blogSlugs = await getBlogSlugs();
+const paths = buildPaths(blogSlugs);
 const lastmod = getLastmod();
-const urls = buildPaths()
+const urls = paths
   .map(
     (path) => `  <url>
     <loc>${toLoc(path)}</loc>
@@ -155,4 +193,4 @@ ${urls}
 `;
 
 writeFileSync(outputPath, xml, "utf8");
-console.log(`Wrote ${outputPath} (${buildPaths().length} URLs, lastmod=${lastmod})`);
+console.log(`Wrote ${outputPath} (${paths.length} URLs, lastmod=${lastmod})`);

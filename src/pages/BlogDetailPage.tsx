@@ -1,13 +1,18 @@
-import { Link, useParams } from "react";
-import { ArrowLeft, ArrowRight, Calendar, Clock, Tag, User } from "lucide-react";
+import { Link, useParams } from "react-router-dom";
+import { ArrowLeft, ArrowRight, Calendar, Clock, Loader2, Tag, User } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import type { SiteLocale } from "@/config/site";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { blogPosts, getBlogPostBySlug } from "@/data/blogPosts";
 import { t } from "@/data/translations";
+import {
+  BlogApiError,
+  fetchPublishedArticle,
+  fetchPublishedArticles,
+} from "@/lib/blog";
 import { blogPostPath, routeFor, routes } from "@/lib/routes";
 import NotFound from "./NotFound";
 
@@ -17,10 +22,52 @@ export type BlogDetailPageProps = {
 
 const BlogDetailPage = ({ locale }: BlogDetailPageProps) => {
   const { slug } = useParams<{ slug: string }>();
-  const post = slug ? getBlogPostBySlug(slug, locale) : undefined;
+  const articleQuery = useQuery({
+    queryKey: ["blog", "article", locale, slug],
+    queryFn: () => fetchPublishedArticle(slug!, locale),
+    enabled: Boolean(slug),
+    retry: (failureCount, error) =>
+      !(error instanceof BlogApiError && error.status === 404) && failureCount < 2,
+  });
+  const articlesQuery = useQuery({
+    queryKey: ["blog", "published-articles"],
+    queryFn: fetchPublishedArticles,
+  });
 
-  if (!post) {
+  if (articleQuery.isLoading) {
+    return (
+      <SiteLayout locale={locale} idPath={routes.blog.id} enPath={routes.blog.en}>
+        <div className="flex min-h-[50vh] items-center justify-center text-muted-foreground">
+          <Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden="true" />
+          {locale === "id" ? "Memuat artikel..." : "Loading article..."}
+        </div>
+      </SiteLayout>
+    );
+  }
+
+  if (
+    !slug ||
+    (articleQuery.error instanceof BlogApiError && articleQuery.error.status === 404)
+  ) {
     return <NotFound />;
+  }
+
+  const post = articleQuery.data;
+  if (!post) {
+    return (
+      <SiteLayout locale={locale} idPath={routes.blog.id} enPath={routes.blog.en}>
+        <div className="container-narrow section-padding text-center">
+          <h1 className="text-2xl font-bold">
+            {locale === "id" ? "Artikel belum dapat dimuat" : "Article could not be loaded"}
+          </h1>
+          <p className="mt-3 text-muted-foreground">
+            {locale === "id"
+              ? "Silakan coba lagi beberapa saat."
+              : "Please try again in a moment."}
+          </p>
+        </div>
+      </SiteLayout>
+    );
   }
 
   const title = t(post.title, locale);
@@ -57,7 +104,7 @@ const BlogDetailPage = ({ locale }: BlogDetailPageProps) => {
     },
   };
 
-  const relatedPosts = blogPosts
+  const relatedPosts = (articlesQuery.data || [])
     .filter((p) => p.id !== post.id)
     .slice(0, 2);
 

@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { Analytics } from "./components/Analytics";
 import HomePage from "./pages/HomePage";
 import NotFound from "./pages/NotFound";
@@ -15,6 +15,7 @@ const CaseStudiesIndexPage = lazy(() => import("./pages/CaseStudiesIndexPage"));
 const CaseStudyDetailPage = lazy(() => import("./pages/CaseStudyDetailPage"));
 const BlogIndexPage = lazy(() => import("./pages/BlogIndexPage"));
 const BlogDetailPage = lazy(() => import("./pages/BlogDetailPage"));
+const BlogDashboardPage = lazy(() => import("./pages/BlogDashboardPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
 const PrivacyPage = lazy(() => import("./pages/PrivacyPage"));
 const TermsPage = lazy(() => import("./pages/TermsPage"));
@@ -60,6 +61,9 @@ const App = () => (
             <Route path="/en/blog" element={<BlogIndexPage locale="en" />} />
             <Route path="/blog/:slug" element={<BlogDetailPage locale="id" />} />
             <Route path="/en/blog/:slug" element={<BlogDetailPage locale="en" />} />
+
+            <Route path="/dashboard" element={<Navigate to="/dashboard/blog" replace />} />
+            <Route path="/dashboard/blog" element={<BlogDashboardPage />} />
 
             <Route path="/kontak" element={<ContactPage locale="id" />} />
             <Route path="/en/contact" element={<ContactPage locale="en" />} />
