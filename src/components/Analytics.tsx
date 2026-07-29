@@ -8,7 +8,14 @@ import { siteConfig } from "@/config/site";
  */
 export const Analytics = () => {
   const id = siteConfig.analytics.gaMeasurementId || "G-51D874NJC9";
-  const location = useLocation();
+  
+  let location = { pathname: "/", search: "" };
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    location = useLocation();
+  } catch {
+    // Fallback if rendered outside Router context
+  }
 
   useEffect(() => {
     if (!id || typeof document === "undefined") return;
@@ -35,7 +42,7 @@ export const Analytics = () => {
         anonymize_ip: true,
       });
     }
-  }, [id, location]);
+  }, [id, location.pathname, location.search]);
 
   return null;
 };

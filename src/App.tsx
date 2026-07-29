@@ -36,8 +36,8 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <Analytics />
       <BrowserRouter>
+        <Analytics />
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/" element={<HomePage locale="id" />} />
