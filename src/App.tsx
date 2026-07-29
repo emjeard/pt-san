@@ -13,6 +13,8 @@ const ServicesIndexPage = lazy(() => import("./pages/ServicesIndexPage"));
 const ServiceDetailPage = lazy(() => import("./pages/ServiceDetailPage"));
 const CaseStudiesIndexPage = lazy(() => import("./pages/CaseStudiesIndexPage"));
 const CaseStudyDetailPage = lazy(() => import("./pages/CaseStudyDetailPage"));
+const BlogIndexPage = lazy(() => import("./pages/BlogIndexPage"));
+const BlogDetailPage = lazy(() => import("./pages/BlogDetailPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
 const PrivacyPage = lazy(() => import("./pages/PrivacyPage"));
 const TermsPage = lazy(() => import("./pages/TermsPage"));
@@ -53,6 +55,11 @@ const App = () => (
             <Route path="/en/case-studies" element={<CaseStudiesIndexPage locale="en" />} />
             <Route path="/studi-kasus/:slug" element={<CaseStudyDetailPage locale="id" />} />
             <Route path="/en/case-studies/:slug" element={<CaseStudyDetailPage locale="en" />} />
+
+            <Route path="/blog" element={<BlogIndexPage locale="id" />} />
+            <Route path="/en/blog" element={<BlogIndexPage locale="en" />} />
+            <Route path="/blog/:slug" element={<BlogDetailPage locale="id" />} />
+            <Route path="/en/blog/:slug" element={<BlogDetailPage locale="en" />} />
 
             <Route path="/kontak" element={<ContactPage locale="id" />} />
             <Route path="/en/contact" element={<ContactPage locale="en" />} />

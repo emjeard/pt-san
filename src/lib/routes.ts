@@ -5,6 +5,7 @@ export const routes = {
   home: { id: "/", en: "/en" },
   services: { id: "/layanan", en: "/en/services" },
   caseStudies: { id: "/studi-kasus", en: "/en/case-studies" },
+  blog: { id: "/blog", en: "/en/blog" },
   about: { id: "/tentang-kami", en: "/en/about" },
   contact: { id: "/kontak", en: "/en/contact" },
   privacy: { id: "/kebijakan-privasi", en: "/en/privacy" },
@@ -19,6 +20,9 @@ export const servicePath = (slug: string, locale: SiteLocale): string =>
 
 export const caseStudyPath = (slug: string, locale: SiteLocale): string =>
   locale === "id" ? `/studi-kasus/${slug}` : `/en/case-studies/${slug}`;
+
+export const blogPostPath = (slug: string, locale: SiteLocale): string =>
+  locale === "id" ? `/blog/${slug}` : `/en/blog/${slug}`;
 
 export const processHashPath = (locale: SiteLocale): string =>
   `${routes.home[locale]}#process`;

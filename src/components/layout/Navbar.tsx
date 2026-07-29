@@ -30,6 +30,7 @@ type NavItem = {
 const navLabels = {
   services: { id: "Layanan", en: "Services" },
   caseStudies: { id: "Studi Kasus", en: "Case Studies" },
+  blog: { id: "Blog", en: "Blog" },
   about: { id: "Tentang", en: "About" },
   process: { id: "Proses", en: "Process" },
   contact: { id: "Kontak", en: "Contact" },
@@ -42,6 +43,7 @@ const navLabels = {
 const buildNavItems = (locale: SiteLocale): NavItem[] => [
   { label: navLabels.services, href: routeFor("services", locale) },
   { label: navLabels.caseStudies, href: routeFor("caseStudies", locale) },
+  { label: navLabels.blog, href: routeFor("blog", locale) },
   { label: navLabels.about, href: routeFor("about", locale) },
   { label: navLabels.process, href: processHashPath(locale) },
   { label: navLabels.contact, href: routeFor("contact", locale) },

@@ -19,6 +19,7 @@ const staticRoutes = {
     "/tentang-kami",
     "/layanan",
     "/studi-kasus",
+    "/blog",
     "/kontak",
     "/kebijakan-privasi",
     "/ketentuan-layanan",
@@ -28,6 +29,7 @@ const staticRoutes = {
     "/en/about",
     "/en/services",
     "/en/case-studies",
+    "/en/blog",
     "/en/contact",
     "/en/privacy",
     "/en/terms",
@@ -80,6 +82,19 @@ const caseStudySlugs = {
   ],
 };
 
+const blogSlugs = {
+  id: [
+    "panduan-implementasi-odoo-erp-indonesia",
+    "arsitektur-sistem-enterprise-scalable-aman",
+    "strategi-pengembangan-produk-saas-b2b",
+  ],
+  en: [
+    "odoo-erp-implementation-guide-indonesia",
+    "scalable-secure-enterprise-system-architecture",
+    "b2b-saas-product-development-strategy",
+  ],
+};
+
 const formatDate = (date) => date.toISOString().slice(0, 10);
 
 const getLastmod = () => {
@@ -105,6 +120,12 @@ const buildPaths = () => {
   }
   for (const slug of caseStudySlugs.en) {
     paths.push(`/en/case-studies/${slug}`);
+  }
+  for (const slug of blogSlugs.id) {
+    paths.push(`/blog/${slug}`);
+  }
+  for (const slug of blogSlugs.en) {
+    paths.push(`/en/blog/${slug}`);
   }
 
   return paths;

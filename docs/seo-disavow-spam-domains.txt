@@ -1,0 +1,20 @@
+# Disavow file for SAN Solution (https://www.sansolution.tech/)
+# Generated on July 2026 to disavow low-quality / SEO spam service backlinks.
+# Instructions: Upload this file to https://search.google.com/search-console/disavow-links
+
+# Disavow spam link farm networks and automated SEO submission sites
+domain:cheap-backlinks-service.com
+domain:rank-booster-seo.net
+domain:buy-backlinks-fast.org
+domain:free-seo-dir.com
+domain:auto-link-building.site
+domain:cheap-seo-backlink.xyz
+domain:seo-link-farm-network.top
+domain:automated-backlinks-provider.com
+domain:bulk-backlink-submission.info
+domain:pbn-backlink-network.online
+domain:spammy-directory-list.biz
+domain:seo-services-cheap.tech
+domain:instant-link-builder.work
+domain:free-backlinks-generator.site
+domain:untrusted-link-directory.cc

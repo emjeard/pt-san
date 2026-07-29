@@ -102,6 +102,11 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
+                <Link to={routeFor("blog", lang)} className={linkClass}>
+                  Blog
+                </Link>
+              </li>
+              <li>
                 <Link to={routeFor("about", lang)} className={linkClass}>
                   {footerCopy.about[lang]}
                 </Link>

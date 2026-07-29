@@ -30,15 +30,36 @@ const homeSeo = {
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
-  "@type": ["Organization", "ProfessionalService"],
+  "@type": ["Organization", "ProfessionalService", "LocalBusiness"],
   name: "SAN Solution",
   url: "https://www.sansolution.tech/",
   logo: "https://www.sansolution.tech/logo.png",
+  image: "https://www.sansolution.tech/og-san-solution.jpg",
   description:
-    "SAN Solution membantu perusahaan, startup, dan organisasi membangun sistem enterprise, produk SaaS, aplikasi mobile, website, dan solusi digital yang siap berkembang.",
+    "SAN Solution membantu perusahaan, startup, dan organisasi membangun sistem enterprise, implementasi Odoo ERP, produk SaaS, aplikasi mobile, dan solusi digital skala besar.",
   foundingDate: "2023",
-  areaServed: "Indonesia",
+  telephone: "+628568862327",
   email: "kontak@sansolution.tech",
+  areaServed: {
+    "@type": "Country",
+    name: "Indonesia",
+  },
+  sameAs: [
+    "https://www.linkedin.com/company/san-solution",
+    "https://github.com/san-solution",
+  ],
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: "ID",
+    addressRegion: "Indonesia",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+628568862327",
+    contactType: "customer service",
+    email: "kontak@sansolution.tech",
+    availableLanguage: ["Indonesian", "English"],
+  },
 };
 
 export type HomePageProps = {
