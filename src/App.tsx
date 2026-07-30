@@ -16,6 +16,7 @@ const CaseStudyDetailPage = lazy(() => import("./pages/CaseStudyDetailPage"));
 const BlogIndexPage = lazy(() => import("./pages/BlogIndexPage"));
 const BlogDetailPage = lazy(() => import("./pages/BlogDetailPage"));
 const BlogDashboardPage = lazy(() => import("./pages/BlogDashboardPage"));
+const ClientsDashboardPage = lazy(() => import("./pages/ClientsDashboardPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
 const PrivacyPage = lazy(() => import("./pages/PrivacyPage"));
 const TermsPage = lazy(() => import("./pages/TermsPage"));
@@ -64,6 +65,7 @@ const App = () => (
 
             <Route path="/dashboard" element={<Navigate to="/dashboard/blog" replace />} />
             <Route path="/dashboard/blog" element={<BlogDashboardPage />} />
+            <Route path="/dashboard/clients" element={<ClientsDashboardPage />} />
 
             <Route path="/kontak" element={<ContactPage locale="id" />} />
             <Route path="/en/contact" element={<ContactPage locale="en" />} />

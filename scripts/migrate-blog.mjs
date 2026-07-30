@@ -66,6 +66,24 @@ const main = async () => {
     [],
   );
 
+  await sql.query(
+    `CREATE TABLE IF NOT EXISTS site_clients (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      logo_url TEXT NOT NULL,
+      website_url TEXT,
+      display_order INTEGER NOT NULL DEFAULT 0 CHECK (display_order >= 0 AND display_order <= 10000),
+      status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published')),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )`,
+    [],
+  );
+  await sql.query(
+    "CREATE INDEX IF NOT EXISTS site_clients_publication_idx ON site_clients (status, display_order, name)",
+    [],
+  );
+
   let inserted = 0;
   for (const post of blogPosts) {
     const rows = await sql.query(
@@ -118,12 +136,20 @@ const main = async () => {
      FROM blog_articles`,
     [],
   );
+  const clientVerification = await sql.query(
+    `SELECT
+      COUNT(*)::int AS total,
+      COUNT(*) FILTER (WHERE status = 'published')::int AS published,
+      COUNT(*) FILTER (WHERE status = 'draft')::int AS drafts
+     FROM site_clients`,
+    [],
+  );
   console.log(`Migration complete. Seed inserted: ${inserted}.`);
   console.log(`Articles: ${verification[0].total} total, ${verification[0].published} published, ${verification[0].drafts} draft.`);
+  console.log(`Clients: ${clientVerification[0].total} total, ${clientVerification[0].published} published, ${clientVerification[0].drafts} draft.`);
 };
 
 main().catch((error) => {
   console.error(error instanceof Error ? error.message : error);
   process.exitCode = 1;
 });
-

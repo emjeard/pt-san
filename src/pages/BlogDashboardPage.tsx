@@ -266,6 +266,7 @@ const BlogDashboardPage = () => {
             <p className="text-xs text-muted-foreground">SAN Solution · NeonDB</p>
           </div>
           <div className="flex gap-2">
+            <Button variant="outline" size="sm" asChild><Link to="/dashboard/clients">Our Clients</Link></Button>
             <Button variant="outline" size="sm" asChild><Link to="/blog"><ExternalLink className="mr-2 h-4 w-4" />Lihat blog</Link></Button>
             <Button variant="ghost" size="sm" onClick={() => logout.mutate()}><LogOut className="mr-2 h-4 w-4" />Keluar</Button>
           </div>

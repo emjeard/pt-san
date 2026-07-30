@@ -13,6 +13,13 @@ import {
   listPublishedArticles,
   updateArticle,
 } from "./blogDb.mjs";
+import {
+  createClient,
+  deleteClient,
+  listAdminClients,
+  listPublishedClients,
+  updateClient,
+} from "./clientDb.mjs";
 
 const JSON_HEADERS = {
   "Content-Type": "application/json; charset=utf-8",
@@ -88,6 +95,38 @@ export const validateArticleInput = (input, existingId) => {
   };
 };
 
+const safeUrl = (value, field, required = false) => {
+  const normalized = text(value, field, 1_000, required);
+  if (!normalized) return undefined;
+  if (normalized.startsWith("/")) return normalized;
+  try {
+    const url = new URL(normalized);
+    if (url.protocol === "http:" || url.protocol === "https:") return url.href;
+  } catch {
+    // Fall through to the validation error below.
+  }
+  throw new Error(`${field} harus berupa URL http(s) atau path yang diawali /.`);
+};
+
+export const validateClientInput = (input, existingId) => {
+  if (!input || typeof input !== "object") throw new Error("Data klien tidak valid.");
+  const displayOrder = Number(input.displayOrder);
+  if (!Number.isInteger(displayOrder) || displayOrder < 0 || displayOrder > 10_000) {
+    throw new Error("Urutan tampil harus antara 0 dan 10000.");
+  }
+  const status = input.status === "published" ? "published" : input.status === "draft" ? "draft" : null;
+  if (!status) throw new Error("Status klien tidak valid.");
+
+  return {
+    id: existingId || text(input.id || randomUUID(), "ID", 100),
+    name: text(input.name, "Nama klien", 160),
+    logoUrl: safeUrl(input.logoUrl, "URL logo", true),
+    websiteUrl: safeUrl(input.websiteUrl, "URL website"),
+    displayOrder,
+    status,
+  };
+};
+
 const normalizePath = (rawUrl) => {
   const pathname = new URL(rawUrl || "/", "http://localhost").pathname;
   return pathname
@@ -139,6 +178,11 @@ export const handleBlogApiRequest = async (request) => {
     if (method === "GET" && path === "/articles") {
       const articles = await listPublishedArticles(databaseUrl);
       return json(200, { articles }, { "Cache-Control": "public, max-age=60, stale-while-revalidate=300" });
+    }
+
+    if (method === "GET" && path === "/clients") {
+      const clients = await listPublishedClients(databaseUrl);
+      return json(200, { clients }, { "Cache-Control": "public, max-age=60, stale-while-revalidate=300" });
     }
 
     const publicMatch = path.match(/^\/articles\/([^/]+)$/);
@@ -195,9 +239,16 @@ export const handleBlogApiRequest = async (request) => {
       if (path === "/admin/articles" && method === "GET") {
         return json(200, { articles: await listAdminArticles(databaseUrl) }, { "Cache-Control": "no-store" });
       }
+      if (path === "/admin/clients" && method === "GET") {
+        return json(200, { clients: await listAdminClients(databaseUrl) }, { "Cache-Control": "no-store" });
+      }
       if (path === "/admin/articles" && method === "POST") {
         const article = validateArticleInput(parseBody(request.body));
         return json(201, { article: await createArticle(databaseUrl, article) }, { "Cache-Control": "no-store" });
+      }
+      if (path === "/admin/clients" && method === "POST") {
+        const client = validateClientInput(parseBody(request.body));
+        return json(201, { client: await createClient(databaseUrl, client) }, { "Cache-Control": "no-store" });
       }
 
       const adminArticleMatch = path.match(/^\/admin\/articles\/([^/]+)$/);
@@ -215,6 +266,22 @@ export const handleBlogApiRequest = async (request) => {
           ? json(200, { ok: true }, { "Cache-Control": "no-store" })
           : json(404, { error: "Artikel tidak ditemukan." });
       }
+
+      const adminClientMatch = path.match(/^\/admin\/clients\/([^/]+)$/);
+      if (adminClientMatch && method === "PUT") {
+        const id = decodeURIComponent(adminClientMatch[1]);
+        const client = validateClientInput(parseBody(request.body), id);
+        const updated = await updateClient(databaseUrl, id, client);
+        return updated
+          ? json(200, { client: updated }, { "Cache-Control": "no-store" })
+          : json(404, { error: "Klien tidak ditemukan." });
+      }
+      if (adminClientMatch && method === "DELETE") {
+        const deleted = await deleteClient(databaseUrl, decodeURIComponent(adminClientMatch[1]));
+        return deleted
+          ? json(200, { ok: true }, { "Cache-Control": "no-store" })
+          : json(404, { error: "Klien tidak ditemukan." });
+      }
     }
 
     return json(404, { error: "Endpoint tidak ditemukan." });
@@ -223,12 +290,12 @@ export const handleBlogApiRequest = async (request) => {
       return json(409, { error: "ID atau slug artikel sudah digunakan." });
     }
     if (error?.code === "42P01") {
-      return json(503, { error: "Tabel blog belum dimigrasikan." });
+      return json(503, { error: "Tabel konten belum dimigrasikan." });
     }
     if (error?.code === "DATABASE_NOT_CONFIGURED") {
       return json(503, { error: "Koneksi database belum dikonfigurasi." });
     }
-    if (error instanceof Error && /wajib|maksimal|harus|tidak valid|antara/.test(error.message)) {
+    if (error instanceof Error && /wajib|maksimal|harus|tidak valid|antara|URL/.test(error.message)) {
       return json(400, { error: error.message });
     }
     console.error("[blog-api]", error);

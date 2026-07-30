@@ -4,7 +4,7 @@ import {
   hasValidAdminSession,
   verifyAdminPassword,
 } from "../../server/blogAuth.mjs";
-import { handleBlogApiRequest, validateArticleInput } from "../../server/blogApi.mjs";
+import { handleBlogApiRequest, validateArticleInput, validateClientInput } from "../../server/blogApi.mjs";
 
 const validArticle = {
   id: "test-article",
@@ -41,6 +41,44 @@ describe("blog article validation", () => {
         slug: { id: "Artikel Tidak Valid", en: "valid-slug" },
       }),
     ).toThrow(/Slug/);
+  });
+});
+
+describe("client validation", () => {
+  it("normalizes a valid client and permits a local logo path", () => {
+    const client = validateClientInput({
+      id: "san-client",
+      name: "SAN Client",
+      logoUrl: "/logos/san-client.svg",
+      websiteUrl: "https://example.com",
+      displayOrder: 10,
+      status: "published",
+    });
+    expect(client.logoUrl).toBe("/logos/san-client.svg");
+    expect(client.status).toBe("published");
+  });
+
+  it("rejects unsafe client links", () => {
+    expect(() => validateClientInput({
+      name: "Unsafe Client",
+      logoUrl: "javascript:alert(1)",
+      displayOrder: 0,
+      status: "draft",
+    })).toThrow(/URL/);
+  });
+
+  it("does not allow client writes without an admin session", async () => {
+    const response = await handleBlogApiRequest({
+      method: "POST",
+      url: "http://localhost/api/blog/admin/clients",
+      headers: { host: "localhost", "x-blog-admin": "1" },
+      body: JSON.stringify({}),
+      env: {
+        BLOG_ADMIN_PASSWORD: "strong-password",
+        BLOG_SESSION_SECRET: "test-session-secret-at-least-32-bytes",
+      },
+    });
+    expect(response.status).toBe(401);
   });
 });
 

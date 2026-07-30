@@ -3,6 +3,7 @@ import { SiteLayout } from "@/components/layout/SiteLayout";
 import { SEOHead } from "@/components/seo/SEOHead";
 import HeroSection from "@/components/sections/HeroSection";
 import TrustSection from "@/components/sections/TrustSection";
+import ClientsSection from "@/components/sections/ClientsSection";
 import ProblemsSection from "@/components/sections/ProblemsSection";
 import ServicesSection from "@/components/sections/ServicesSection";
 import CaseStudiesSection from "@/components/sections/CaseStudiesSection";
@@ -82,6 +83,7 @@ const HomePage = ({ locale }: HomePageProps) => {
       />
       <HeroSection />
       <TrustSection />
+      <ClientsSection />
       <ProblemsSection />
       <ServicesSection />
       <CaseStudiesSection />
