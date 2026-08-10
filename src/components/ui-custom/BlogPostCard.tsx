@@ -17,6 +17,16 @@ export const BlogPostCard = ({ post, locale }: BlogPostCardProps) => {
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition-all hover:border-primary/30 hover:shadow-soft">
+      {post.featuredImage && (
+        <div className="aspect-[2/1] w-full overflow-hidden border-b border-border bg-muted">
+          <img
+            src={post.featuredImage}
+            alt={t(post.title, locale)}
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            loading="lazy"
+          />
+        </div>
+      )}
       <div className="flex flex-1 flex-col p-7">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
           <Badge variant="outline" className="bg-softmint/30 text-xs font-semibold text-primary">
@@ -38,9 +48,14 @@ export const BlogPostCard = ({ post, locale }: BlogPostCardProps) => {
           <Link to={detailPath}>{t(post.title, locale)}</Link>
         </h2>
 
-        <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
-          {t(post.excerpt, locale)}
-        </p>
+        <div className="mt-3 flex-1 space-y-2 text-sm leading-relaxed text-muted-foreground">
+          {t(post.excerpt, locale).split('\n').filter(Boolean).slice(0, 2).map((point, i) => (
+            <p key={i} className="flex gap-2">
+              <span className="text-primary mt-1 shrink-0">•</span>
+              <span className="line-clamp-2">{point}</span>
+            </p>
+          ))}
+        </div>
 
         <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-border/60 pt-4">
           <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">

@@ -41,9 +41,9 @@ const text = (value, field, maxLength, required = true) => {
   return normalized;
 };
 
-const translated = (value, field, maxLength) => ({
-  id: text(value?.id, `${field} (ID)`, maxLength),
-  en: text(value?.en, `${field} (EN)`, maxLength),
+const translated = (value, field, maxLength, required = true) => ({
+  id: text(value?.id, `${field} (ID)`, maxLength, required),
+  en: text(value?.en, `${field} (EN)`, maxLength, required),
 });
 
 const stringArray = (value, field) => {
@@ -76,15 +76,17 @@ export const validateArticleInput = (input, existingId) => {
     id: existingId || text(input.id || randomUUID(), "ID", 100),
     slug,
     title: translated(input.title, "Judul", 240),
-    excerpt: translated(input.excerpt, "Ringkasan", 600),
+    seoTitle: translated(input.seoTitle, "SEO Title", 240, false),
+    metaDescription: translated(input.metaDescription, "Meta Description", 600, false),
+    excerpt: translated(input.excerpt, "Ringkasan", 10_000),
     content: translated(input.content, "Konten", 100_000),
     category: translated(input.category, "Kategori", 120),
     publishedAt,
     readTimeMinutes,
     author: {
-      name: text(input.author?.name, "Nama penulis", 160),
-      role: translated(input.author?.role, "Peran penulis", 200),
-      bio: translated(input.author?.bio, "Bio penulis", 800),
+      name: text(input.author?.name, "Nama penulis", 160, false),
+      role: translated(input.author?.role, "Peran penulis", 200, false),
+      bio: translated(input.author?.bio, "Bio penulis", 800, false),
       avatarUrl: text(input.author?.avatarUrl, "URL avatar", 1_000, false) || undefined,
     },
     tags: stringArray(input.tags || [], "Tag"),
@@ -245,6 +247,36 @@ export const handleBlogApiRequest = async (request) => {
       if (path === "/admin/articles" && method === "POST") {
         const article = validateArticleInput(parseBody(request.body));
         return json(201, { article: await createArticle(databaseUrl, article) }, { "Cache-Control": "no-store" });
+      }
+      if (path === "/admin/upload" && method === "POST") {
+        const body = parseBody(request.body);
+        if (!body.file || !body.fileName) {
+          return json(400, { error: "File dan fileName diperlukan." });
+        }
+        if (!env.IMAGEKIT_PRIVATE_KEY) {
+          return json(503, { error: "IMAGEKIT_PRIVATE_KEY belum dikonfigurasi." });
+        }
+
+        const formData = new FormData();
+        formData.append("file", body.file);
+        formData.append("fileName", body.fileName);
+        formData.append("folder", "/blog");
+
+        const ikResponse = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
+          method: "POST",
+          headers: {
+            Authorization: "Basic " + Buffer.from(env.IMAGEKIT_PRIVATE_KEY + ":").toString("base64"),
+          },
+          body: formData,
+        });
+
+        if (!ikResponse.ok) {
+          const err = await ikResponse.json().catch(() => ({}));
+          return json(502, { error: err.message || "Gagal upload ke ImageKit." });
+        }
+
+        const ikResult = await ikResponse.json();
+        return json(200, { url: ikResult.url }, { "Cache-Control": "no-store" });
       }
       if (path === "/admin/clients" && method === "POST") {
         const client = validateClientInput(parseBody(request.body));

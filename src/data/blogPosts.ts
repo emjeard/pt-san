@@ -11,6 +11,8 @@ export type BlogPost = {
   id: string;
   slug: { id: string; en: string };
   title: TranslatableString;
+  seoTitle?: TranslatableString;
+  metaDescription?: TranslatableString;
   excerpt: TranslatableString;
   content: TranslatableString;
   publishedAt: string;

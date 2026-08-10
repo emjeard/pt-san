@@ -1,5 +1,5 @@
-import { FormEvent, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { FormEvent, useEffect, useState, useRef } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft,
@@ -10,6 +10,22 @@ import {
   Pencil,
   Save,
   Trash2,
+  Upload,
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  Link as LinkIcon,
+  Quote,
+  Code,
+  List,
+  ListOrdered,
+  AlignLeft,
+  AlignCenter,
+  Image as ImageIcon,
+  Type,
+  Tag,
+  type LucideIcon
 } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +34,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { CKEditorField } from "@/components/blog/CKEditorField";
 import {
   BlogApiError,
   type AdminBlogArticle,
@@ -29,6 +46,7 @@ import {
   loginBlogAdmin,
   logoutBlogAdmin,
   updateBlogArticle,
+  uploadImageKit
 } from "@/lib/blog";
 import { blogPostPath } from "@/lib/routes";
 
@@ -38,6 +56,8 @@ const emptyArticle = (): BlogArticleInput => ({
   id: "",
   slug: { id: "", en: "" },
   title: { id: "", en: "" },
+  seoTitle: { id: "", en: "" },
+  metaDescription: { id: "", en: "" },
   excerpt: { id: "", en: "" },
   content: { id: "", en: "" },
   publishedAt: today(),
@@ -64,46 +84,6 @@ const splitList = (value: string) =>
 
 const errorMessage = (error: unknown) =>
   error instanceof Error ? error.message : "Permintaan gagal.";
-
-type TranslatedFieldProps = {
-  label: string;
-  value: { id: string; en: string };
-  onChange: (locale: "id" | "en", value: string) => void;
-  multiline?: boolean;
-  rows?: number;
-  required?: boolean;
-};
-
-const TranslatedField = ({
-  label,
-  value,
-  onChange,
-  multiline = false,
-  rows = 3,
-  required = true,
-}: TranslatedFieldProps) => (
-  <div className="grid gap-4 md:grid-cols-2">
-    {(["id", "en"] as const).map((locale) => (
-      <div className="space-y-2" key={locale}>
-        <Label>{label} ({locale.toUpperCase()})</Label>
-        {multiline ? (
-          <Textarea
-            value={value[locale]}
-            onChange={(event) => onChange(locale, event.target.value)}
-            rows={rows}
-            required={required}
-          />
-        ) : (
-          <Input
-            value={value[locale]}
-            onChange={(event) => onChange(locale, event.target.value)}
-            required={required}
-          />
-        )}
-      </div>
-    ))}
-  </div>
-);
 
 const LoginPanel = ({ onSuccess }: { onSuccess: () => void }) => {
   const [password, setPassword] = useState("");
@@ -157,16 +137,28 @@ const LoginPanel = ({ onSuccess }: { onSuccess: () => void }) => {
   );
 };
 
+
+
 const BlogDashboardPage = () => {
   const queryClient = useQueryClient();
+  const [searchParams, setSearchParams] = useSearchParams();
   const session = useQuery({ queryKey: ["blog-admin", "session"], queryFn: fetchAdminSession, retry: false });
   const articles = useQuery({
     queryKey: ["blog-admin", "articles"],
     queryFn: fetchAdminArticles,
     enabled: session.data === true,
   });
+  
+  const [view, setView] = useState<"list" | "edit">("list");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<BlogArticleInput>(emptyArticle);
+  
+  // Dynamic list state for excerpt (ringkasan)
+  const [excerptPoints, setExcerptPoints] = useState<string[]>([""]);
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   useEffect(() => {
     document.title = "Dashboard Blog | SAN Solution";
@@ -183,20 +175,60 @@ const BlogDashboardPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!articles.data) return;
+    const action = searchParams.get("action");
+    const editId = searchParams.get("id");
+
+    if (action === "edit" && editId) {
+      if (editingId !== editId) {
+        const article = articles.data.find((a) => a.id === editId);
+        if (article) {
+          setEditingId(article.id);
+          setForm(fromAdminArticle(article));
+          setExcerptPoints(article.excerpt.id ? article.excerpt.id.split("\n") : [""]);
+          setView("edit");
+        } else {
+          setSearchParams({});
+        }
+      }
+    } else if (action === "new") {
+      if (editingId !== null || view !== "edit") {
+        setEditingId(null);
+        setForm(emptyArticle());
+        setExcerptPoints([""]);
+        setView("edit");
+      }
+    } else {
+      if (view !== "list") {
+        setView("list");
+        setEditingId(null);
+      }
+    }
+  }, [searchParams, articles.data, editingId, view, setSearchParams]);
+
   const refresh = async () => {
     await queryClient.invalidateQueries({ queryKey: ["blog-admin"] });
     await queryClient.invalidateQueries({ queryKey: ["blog"] });
   };
 
   const save = useMutation({
-    mutationFn: () => editingId
-      ? updateBlogArticle(editingId, form)
-      : createBlogArticle(form),
+    mutationFn: () => {
+      const payload = {
+        ...form,
+        excerpt: {
+          id: excerptPoints.filter(Boolean).join("\n"),
+          en: excerptPoints.filter(Boolean).join("\n"),
+        }
+      };
+      return editingId ? updateBlogArticle(editingId, payload) : createBlogArticle(payload);
+    },
     onSuccess: async (article) => {
       setEditingId(article.id);
       setForm(fromAdminArticle(article));
       await refresh();
       toast.success("Artikel berhasil disimpan.");
+      setSearchParams({});
     },
     onError: (error) => toast.error(errorMessage(error)),
   });
@@ -206,8 +238,10 @@ const BlogDashboardPage = () => {
     onSuccess: async () => {
       setEditingId(null);
       setForm(emptyArticle());
+      setExcerptPoints([""]);
       await refresh();
       toast.success("Artikel berhasil dihapus.");
+      setSearchParams({});
     },
     onError: (error) => toast.error(errorMessage(error)),
   });
@@ -234,107 +268,395 @@ const BlogDashboardPage = () => {
     return <LoginPanel onSuccess={() => queryClient.invalidateQueries({ queryKey: ["blog-admin", "session"] })} />;
   }
 
-  const updateTranslated = (
-    field: "slug" | "title" | "excerpt" | "content" | "category",
-    locale: "id" | "en",
-    value: string,
-  ) => setForm((current) => ({ ...current, [field]: { ...current[field], [locale]: value } }));
-
   const startNew = () => {
-    setEditingId(null);
-    setForm(emptyArticle());
+    setSearchParams({ action: "new" });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const startEdit = (article: AdminBlogArticle) => {
-    setEditingId(article.id);
-    setForm(fromAdminArticle(article));
+    setSearchParams({ action: "edit", id: article.id });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const submit = (event: FormEvent) => {
-    event.preventDefault();
+  const submit = (event?: FormEvent) => {
+    if (event) event.preventDefault();
     save.mutate();
   };
 
+  const handleInsertMarkdown = (prefix: string, suffix = "") => {
+    if (!textareaRef.current) return;
+    const el = textareaRef.current;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const text = form.content.id;
+    const before = text.substring(0, start);
+    const selected = text.substring(start, end);
+    const after = text.substring(end);
+    
+    const newText = before + prefix + selected + suffix + after;
+    setForm(f => ({ ...f, content: { id: newText, en: newText } }));
+    
+    setTimeout(() => {
+      el.focus();
+      el.setSelectionRange(start + prefix.length, end + prefix.length);
+    }, 0);
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingImage(true);
+    try {
+      const reader = new FileReader();
+      reader.onload = async () => {
+        try {
+          const base64 = reader.result as string;
+          const url = await uploadImageKit(base64, file.name);
+          setForm(f => ({ ...f, featuredImage: url }));
+          toast.success("Gambar berhasil diupload!");
+        } catch (error) {
+          toast.error(errorMessage(error));
+        } finally {
+          setUploadingImage(false);
+          if (fileInputRef.current) fileInputRef.current.value = "";
+        }
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      toast.error("Gagal membaca file.");
+      setUploadingImage(false);
+    }
+  };
+
+  if (view === "list") {
+    return (
+      <main className="min-h-screen bg-muted/30">
+        <header className="sticky top-0 z-30 border-b bg-white/95 backdrop-blur">
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+            <div>
+              <p className="text-xs font-bold text-red-600 uppercase tracking-widest">BULETIN</p>
+              <h1 className="text-xl font-bold">Editorial dashboard</h1>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" asChild><Link to="/blog"><ExternalLink className="mr-2 h-4 w-4" />Lihat blog</Link></Button>
+              <Button variant="ghost" size="sm" onClick={() => logout.mutate()}><LogOut className="h-4 w-4" /></Button>
+            </div>
+          </div>
+        </header>
+
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold">Semua Artikel</h2>
+            <Button onClick={startNew} className="bg-red-700 hover:bg-red-800 text-white"><FilePlus2 className="mr-2 h-4 w-4" />Artikel Baru</Button>
+          </div>
+          
+          {articles.isLoading ? <div className="flex justify-center py-10"><Loader2 className="h-5 w-5 animate-spin" /></div> : articles.isError ? <p className="text-sm text-destructive">{errorMessage(articles.error)}</p> : (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {articles.data?.map((article) => (
+                <Card key={article.id} className="hover:border-primary cursor-pointer transition-colors" onClick={() => startEdit(article)}>
+                  <CardContent className="p-6">
+                    <div className="mb-4 flex items-start justify-between gap-2">
+                      <Badge variant={article.status === "published" ? "default" : "secondary"}>{article.status}</Badge>
+                      <span className="text-xs text-muted-foreground">{article.publishedAt}</span>
+                    </div>
+                    <h3 className="line-clamp-2 text-lg font-bold mb-2">{article.title.id}</h3>
+                    <p className="line-clamp-2 text-sm text-muted-foreground mb-4">{article.excerpt.id?.split("\n")[0] || ""}</p>
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline" className="flex-1" onClick={(e) => { e.stopPropagation(); startEdit(article); }}><Pencil className="mr-2 h-3.5 w-3.5" />Edit</Button>
+                      {article.status === "published" && <Button size="icon" variant="ghost" asChild onClick={(e) => e.stopPropagation()}><Link to={blogPostPath(article.slug.id, "id")} target="_blank"><ExternalLink className="h-4 w-4" /></Link></Button>}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+              {!articles.data?.length && <div className="col-span-full rounded-lg border border-dashed p-12 text-center text-muted-foreground">Belum ada artikel. Klik "Artikel Baru" untuk membuat.</div>}
+            </div>
+          )}
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <main className="min-h-screen bg-muted/30">
+    <main className="min-h-screen bg-muted/30 pb-20">
       <header className="sticky top-0 z-30 border-b bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <div>
-            <h1 className="text-xl font-bold">Manajemen Artikel Blog</h1>
-            <p className="text-xs text-muted-foreground">SAN Solution · NeonDB</p>
+            <p className="text-xs font-bold text-red-600 uppercase tracking-widest">BULETIN</p>
+            <h1 className="text-xl font-bold">Editorial dashboard</h1>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" asChild><Link to="/dashboard/clients">Our Clients</Link></Button>
             <Button variant="outline" size="sm" asChild><Link to="/blog"><ExternalLink className="mr-2 h-4 w-4" />Lihat blog</Link></Button>
-            <Button variant="ghost" size="sm" onClick={() => logout.mutate()}><LogOut className="mr-2 h-4 w-4" />Keluar</Button>
+            <Button variant="ghost" size="sm" onClick={() => logout.mutate()}><LogOut className="h-4 w-4" /></Button>
           </div>
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <Card>
-          <CardHeader className="flex-row items-start justify-between gap-4">
-            <div><CardTitle>{editingId ? "Edit artikel" : "Artikel baru"}</CardTitle><CardDescription>Isi versi Bahasa Indonesia dan English sebelum menyimpan.</CardDescription></div>
-            <Button type="button" variant="outline" size="sm" onClick={startNew}><FilePlus2 className="mr-2 h-4 w-4" />Baru</Button>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={submit} className="space-y-7">
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div className="space-y-2"><Label>Status</Label><select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" value={form.status} onChange={(event) => setForm({ ...form, status: event.target.value as "draft" | "published" })}><option value="draft">Draft</option><option value="published">Published</option></select></div>
-                <div className="space-y-2"><Label>Tanggal terbit</Label><Input type="date" value={form.publishedAt} onChange={(event) => setForm({ ...form, publishedAt: event.target.value })} required /></div>
-                <div className="space-y-2"><Label>Waktu baca (menit)</Label><Input type="number" min={1} max={180} value={form.readTimeMinutes} onChange={(event) => setForm({ ...form, readTimeMinutes: Number(event.target.value) })} required /></div>
-              </div>
-
-              <TranslatedField label="Slug" value={form.slug} onChange={(locale, value) => updateTranslated("slug", locale, value)} />
-              <TranslatedField label="Judul" value={form.title} onChange={(locale, value) => updateTranslated("title", locale, value)} />
-              <TranslatedField label="Kategori" value={form.category} onChange={(locale, value) => updateTranslated("category", locale, value)} />
-              <TranslatedField label="Ringkasan" value={form.excerpt} multiline rows={4} onChange={(locale, value) => updateTranslated("excerpt", locale, value)} />
-              <TranslatedField label="Konten Markdown" value={form.content} multiline rows={16} onChange={(locale, value) => updateTranslated("content", locale, value)} />
-
-              <div className="border-t pt-6">
-                <h2 className="mb-4 font-semibold">Penulis</h2>
-                <div className="space-y-4">
-                  <div className="space-y-2"><Label>Nama</Label><Input value={form.author.name} onChange={(event) => setForm({ ...form, author: { ...form.author, name: event.target.value } })} required /></div>
-                  <TranslatedField label="Peran" value={form.author.role} onChange={(locale, value) => setForm((current) => ({ ...current, author: { ...current.author, role: { ...current.author.role, [locale]: value } } }))} />
-                  <TranslatedField label="Bio" value={form.author.bio} multiline onChange={(locale, value) => setForm((current) => ({ ...current, author: { ...current.author, bio: { ...current.author.bio, [locale]: value } } }))} />
+      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
+        <Button variant="link" className="px-0 text-muted-foreground mb-2" onClick={() => setSearchParams({})}>
+          &larr; Kembali ke daftar
+        </Button>
+        
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+          {/* Main Content Area */}
+          <div className="space-y-6">
+            <Card className="overflow-hidden border-0 shadow-sm">
+              <CardHeader className="flex-row items-start justify-between gap-4 bg-white border-b px-8 py-6">
+                <div>
+                  <p className="text-xs font-bold text-red-600 uppercase tracking-widest">EDIT ARTIKEL</p>
+                  <CardTitle className="text-2xl mt-1">Konten dan optimasi SEO</CardTitle>
                 </div>
-              </div>
+                <Button type="button" className="bg-red-700 hover:bg-red-800 text-white shadow" onClick={() => submit()} disabled={save.isPending}>
+                  {save.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />} Simpan artikel
+                </Button>
+              </CardHeader>
+              <CardContent className="bg-white px-8 py-8 space-y-8">
+                
+                {/* Judul */}
+                <div className="space-y-2">
+                  <Label className="text-base font-semibold">Judul artikel</Label>
+                  <Input 
+                    className="text-lg py-6"
+                    value={form.title.id} 
+                    onChange={e => setForm(f => ({ ...f, title: { id: e.target.value, en: e.target.value } }))} 
+                    placeholder="Masukkan judul artikel"
+                  />
+                </div>
 
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2"><Label>Tag (pisahkan dengan koma)</Label><Input value={form.tags.join(", ")} onChange={(event) => setForm({ ...form, tags: splitList(event.target.value) })} /></div>
-                <div className="space-y-2"><Label>URL gambar utama</Label><Input value={form.featuredImage || ""} onChange={(event) => setForm({ ...form, featuredImage: event.target.value })} /></div>
-                <div className="space-y-2"><Label>ID layanan terkait</Label><Input value={form.relatedServiceIds.join(", ")} onChange={(event) => setForm({ ...form, relatedServiceIds: splitList(event.target.value) })} /></div>
-                <div className="space-y-2"><Label>ID studi kasus terkait</Label><Input value={form.relatedCaseStudyIds.join(", ")} onChange={(event) => setForm({ ...form, relatedCaseStudyIds: splitList(event.target.value) })} /></div>
-              </div>
+                {/* Slug */}
+                <div className="space-y-2">
+                  <Label className="text-base font-semibold">Slug URL</Label>
+                  <Input 
+                    value={form.slug.id} 
+                    onChange={e => setForm(f => ({ ...f, slug: { id: e.target.value, en: e.target.value } }))} 
+                  />
+                  <p className="text-xs text-muted-foreground">/blog/{form.slug.id}</p>
+                </div>
 
-              <div className="flex flex-wrap justify-between gap-3 border-t pt-6">
-                {editingId ? <Button type="button" variant="destructive" disabled={remove.isPending} onClick={() => { if (window.confirm("Hapus artikel ini secara permanen?")) remove.mutate(editingId); }}><Trash2 className="mr-2 h-4 w-4" />Hapus</Button> : <span />}
-                <Button type="submit" disabled={save.isPending}>{save.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}Simpan artikel</Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+                {/* Ringkasan Poin */}
+                <div className="space-y-3">
+                  <Label className="text-base font-semibold flex items-center gap-2">Ringkasan <span className="text-muted-foreground font-normal text-sm">(poin-poin penting)</span></Label>
+                  <div className="space-y-2">
+                    {excerptPoints.map((point, idx) => (
+                      <div key={idx} className="flex items-start gap-2">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-600 font-medium text-sm mt-1">
+                          {idx + 1}
+                        </div>
+                        <Textarea 
+                          value={point}
+                          rows={2}
+                          className="min-h-[60px] resize-y"
+                          onChange={(e) => {
+                            const newPoints = [...excerptPoints];
+                            newPoints[idx] = e.target.value;
+                            setExcerptPoints(newPoints);
+                          }} 
+                          onPaste={(e) => {
+                            const pastedText = e.clipboardData.getData("text/plain") || e.clipboardData.getData("Text");
+                            if (pastedText.includes('\n')) {
+                              e.preventDefault();
+                              const splitText = pastedText.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+                              if (splitText.length > 0) {
+                                let newPoints = [...excerptPoints];
+                                newPoints.splice(idx, 1, ...splitText);
+                                newPoints = newPoints.slice(0, 8); // Max 8 points
+                                setExcerptPoints(newPoints);
+                              }
+                            }
+                          }}
+                        />
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          onClick={() => {
+                            if (excerptPoints.length === 1) {
+                              setExcerptPoints([""]);
+                            } else {
+                              setExcerptPoints(excerptPoints.filter((_, i) => i !== idx));
+                            }
+                          }}
+                          className="text-muted-foreground hover:text-destructive mt-1 shrink-0"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex justify-between items-center mt-2">
+                    {excerptPoints.length < 8 ? (
+                      <Button 
+                        variant="outline" 
+                        type="button" 
+                        className="w-full border-dashed text-muted-foreground hover:text-foreground"
+                        onClick={() => setExcerptPoints([...excerptPoints, ""])}
+                      >
+                        + Tambah poin
+                      </Button>
+                    ) : <span />}
+                    <span className="text-xs text-muted-foreground min-w-max ml-4">{excerptPoints.length} / 8 poin</span>
+                  </div>
+                </div>
 
-        <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
-          <div className="flex items-center justify-between"><h2 className="font-semibold">Semua artikel</h2><Badge variant="secondary">{articles.data?.length || 0}</Badge></div>
-          {articles.isLoading ? <div className="flex justify-center py-10"><Loader2 className="h-5 w-5 animate-spin" /></div> : articles.isError ? <p className="text-sm text-destructive">{errorMessage(articles.error)}</p> : (
-            <div className="max-h-[calc(100vh-160px)] space-y-3 overflow-y-auto pr-1">
-              {articles.data?.map((article) => (
-                <Card key={article.id} className={editingId === article.id ? "border-primary" : ""}>
-                  <CardContent className="p-4">
-                    <div className="mb-2 flex items-start justify-between gap-2"><Badge variant={article.status === "published" ? "default" : "secondary"}>{article.status}</Badge><span className="text-xs text-muted-foreground">{article.publishedAt}</span></div>
-                    <h3 className="line-clamp-2 text-sm font-semibold">{article.title.id}</h3>
-                    <p className="mt-1 truncate text-xs text-muted-foreground">/{article.slug.id}</p>
-                    <div className="mt-3 flex gap-2"><Button size="sm" variant="outline" className="flex-1" onClick={() => startEdit(article)}><Pencil className="mr-2 h-3.5 w-3.5" />Edit</Button>{article.status === "published" && <Button size="icon" variant="ghost" asChild><Link to={blogPostPath(article.slug.id, "id")} target="_blank"><ExternalLink className="h-4 w-4" /></Link></Button>}</div>
-                  </CardContent>
-                </Card>
-              ))}
-              {!articles.data?.length && <p className="rounded-lg border border-dashed p-6 text-center text-sm text-muted-foreground">Belum ada artikel.</p>}
-            </div>
-          )}
-        </aside>
+                {/* Isi Artikel */}
+                <div className="space-y-2">
+                  <Label className="text-base font-semibold">Isi artikel</Label>
+                  <div className="mt-2">
+                    <CKEditorField 
+                      value={form.content.id} 
+                      onChange={html => setForm(f => ({ ...f, content: { id: html, en: html } }))}
+                    />
+                  </div>
+                </div>
+
+                {/* Extra (Author) */}
+                <div className="pt-8 border-t space-y-4">
+                  <Label className="text-base font-semibold">Info Penulis <span className="text-muted-foreground font-normal text-sm">(Opsional)</span></Label>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-2"><Label>Nama</Label><Input value={form.author.name} onChange={e => setForm(f => ({ ...f, author: { ...f.author, name: e.target.value } }))} /></div>
+                    <div className="space-y-2"><Label>Peran</Label><Input value={form.author.role.id} onChange={e => setForm(f => ({ ...f, author: { ...f.author, role: { id: e.target.value, en: e.target.value } } }))} /></div>
+                  </div>
+                </div>
+
+                {editingId && (
+                  <div className="pt-4 flex justify-end">
+                    <Button type="button" variant="destructive" onClick={() => { if (window.confirm("Hapus artikel ini secara permanen?")) remove.mutate(); }}>
+                      <Trash2 className="mr-2 h-4 w-4" /> Hapus Artikel
+                    </Button>
+                  </div>
+                )}
+
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Sidebar */}
+          <aside className="space-y-6">
+            <Card className="border-0 shadow-sm">
+              <CardHeader className="pb-3 px-6 pt-6"><CardTitle className="text-base">Publikasi</CardTitle></CardHeader>
+              <CardContent className="px-6 pb-6">
+                <select 
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" 
+                  value={form.status} 
+                  onChange={e => setForm({ ...form, status: e.target.value as "draft" | "published" })}
+                >
+                  <option value="draft">Draft</option>
+                  <option value="published">Terbitkan</option>
+                </select>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-sm">
+              <CardHeader className="pb-3 px-6 pt-6"><CardTitle className="text-base">Kategori</CardTitle></CardHeader>
+              <CardContent className="px-6 pb-6 space-y-3">
+                <select 
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  value={["Teknologi Pendidikan", "AI dalam Bisnis", "Transformasi Digital"].includes(form.category.id) ? form.category.id : "custom"}
+                  onChange={e => {
+                    if (e.target.value !== "custom") {
+                      setForm(f => ({ ...f, category: { id: e.target.value, en: e.target.value } }));
+                    }
+                  }}
+                >
+                  <option value="Teknologi Pendidikan">Teknologi Pendidikan</option>
+                  <option value="AI dalam Bisnis">AI dalam Bisnis</option>
+                  <option value="Transformasi Digital">Transformasi Digital</option>
+                  <option value="custom">Kategori Lain...</option>
+                </select>
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-muted-foreground">Atau ketik kategori kustom:</Label>
+                  <Input 
+                    value={form.category.id} 
+                    onChange={e => setForm(f => ({ ...f, category: { id: e.target.value, en: e.target.value } }))} 
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-sm">
+              <CardHeader className="pb-3 px-6 pt-6"><CardTitle className="text-base">Gambar utama</CardTitle></CardHeader>
+              <CardContent className="px-6 pb-6 space-y-4">
+                {form.featuredImage ? (
+                  <div className="relative aspect-video rounded-md overflow-hidden bg-muted group">
+                    <img src={form.featuredImage} alt="Featured" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <Button variant="secondary" size="sm" onClick={() => fileInputRef.current?.click()}>Ganti Gambar</Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="aspect-video rounded-md border-2 border-dashed flex flex-col items-center justify-center text-muted-foreground p-4 text-center bg-muted/20">
+                    <ImageIcon className="h-8 w-8 mb-2 opacity-50" />
+                    <span className="text-xs">Belum ada gambar utama</span>
+                  </div>
+                )}
+                
+                <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleImageUpload} />
+                
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  className="w-full text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploadingImage}
+                >
+                  {uploadingImage ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}
+                  Upload ke ImageKit
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-sm">
+              <CardHeader className="pb-3 px-6 pt-6"><CardTitle className="text-base flex items-center gap-2"><Tag className="h-4 w-4 text-red-600" /> SEO & Kata Kunci</CardTitle></CardHeader>
+              <CardContent className="px-6 pb-6 space-y-4">
+                <div className="space-y-2">
+                  <Label className="font-semibold">Focus keyword</Label>
+                  <Input 
+                    value={form.tags[0] || ""} 
+                    onChange={e => {
+                      const newTags = [...form.tags];
+                      newTags[0] = e.target.value;
+                      setForm(f => ({ ...f, tags: newTags.filter(Boolean) }));
+                    }}
+                  />
+                  <p className="text-[10px] text-muted-foreground">Kata kunci utama yang ingin diraih</p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="font-semibold">Kata kunci pendukung</Label>
+                  <Textarea 
+                    rows={3}
+                    value={form.tags.slice(1).join(", ")} 
+                    onChange={e => {
+                      const focus = form.tags[0] || "";
+                      const rest = splitList(e.target.value);
+                      setForm(f => ({ ...f, tags: [focus, ...rest].filter(Boolean) }));
+                    }}
+                    placeholder="Pendidikan Indonesia 2026, pembelajaran..."
+                  />
+                  <p className="text-[10px] text-muted-foreground">Pisahkan dengan koma</p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="font-semibold">SEO title</Label>
+                  <Input 
+                    value={form.seoTitle?.id || ""} 
+                    onChange={e => setForm(f => ({ ...f, seoTitle: { id: e.target.value, en: e.target.value } }))}
+                  />
+                  <p className="text-[10px] text-muted-foreground">Ideal 50-60 karakter - {form.seoTitle?.id?.length || 0}/60</p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="font-semibold">Meta description</Label>
+                  <Textarea 
+                    rows={4}
+                    value={form.metaDescription?.id || ""} 
+                    onChange={e => setForm(f => ({ ...f, metaDescription: { id: e.target.value, en: e.target.value } }))}
+                  />
+                  <p className="text-[10px] text-muted-foreground">Ideal 140-160 karakter - {form.metaDescription?.id?.length || 0}/160</p>
+                </div>
+              </CardContent>
+            </Card>
+
+          </aside>
+        </div>
       </div>
     </main>
   );

@@ -37,6 +37,10 @@ const main = async () => {
       slug_en TEXT NOT NULL UNIQUE,
       title_id TEXT NOT NULL,
       title_en TEXT NOT NULL,
+      seo_title_id TEXT,
+      seo_title_en TEXT,
+      meta_description_id TEXT,
+      meta_description_en TEXT,
       excerpt_id TEXT NOT NULL,
       excerpt_en TEXT NOT NULL,
       content_id TEXT NOT NULL,
@@ -61,6 +65,16 @@ const main = async () => {
     )`,
     [],
   );
+
+  await sql.query(
+    `ALTER TABLE blog_articles
+     ADD COLUMN IF NOT EXISTS seo_title_id TEXT,
+     ADD COLUMN IF NOT EXISTS seo_title_en TEXT,
+     ADD COLUMN IF NOT EXISTS meta_description_id TEXT,
+     ADD COLUMN IF NOT EXISTS meta_description_en TEXT;`,
+    []
+  );
+
   await sql.query(
     "CREATE INDEX IF NOT EXISTS blog_articles_publication_idx ON blog_articles (status, published_at DESC)",
     [],

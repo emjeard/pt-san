@@ -111,3 +111,11 @@ export const deleteBlogArticle = async (id: string): Promise<void> => {
   await requestBlog(`/admin/articles/${encodeURIComponent(id)}`, { method: "DELETE" });
 };
 
+export const uploadImageKit = async (fileBase64: string, fileName: string): Promise<string> => {
+  const payload = await requestBlog<{ url: string }>("/admin/upload", {
+    method: "POST",
+    body: JSON.stringify({ file: fileBase64, fileName }),
+  });
+  return payload.url;
+};
+

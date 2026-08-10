@@ -8,7 +8,7 @@ const readBody = async (request: IncomingMessage) => {
   for await (const chunk of request) {
     const buffer = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
     size += buffer.length;
-    if (size > 1_000_000) throw new Error("Request body is too large");
+    if (size > 10_000_000) throw new Error("Request body is too large");
     chunks.push(buffer);
   }
   return Buffer.concat(chunks).toString("utf8");

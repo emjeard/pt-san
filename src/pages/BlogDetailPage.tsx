@@ -1,4 +1,6 @@
 import { Link, useParams } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 import { ArrowLeft, ArrowRight, Calendar, Clock, Loader2, Tag, User } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import type { SiteLocale } from "@/config/site";
@@ -74,6 +76,8 @@ const BlogDetailPage = ({ locale }: BlogDetailPageProps) => {
   const description = t(post.excerpt, locale);
   const category = t(post.category, locale);
   const content = t(post.content, locale);
+  const seoTitleText = post.seoTitle && t(post.seoTitle, locale) ? t(post.seoTitle, locale) : title;
+  const metaDescriptionText = post.metaDescription && t(post.metaDescription, locale) ? t(post.metaDescription, locale) : description;
   const canonicalPath = blogPostPath(post.slug[locale], locale);
   const alternateIdPath = blogPostPath(post.slug.id, "id");
   const alternateEnPath = blogPostPath(post.slug.en, "en");
@@ -81,8 +85,8 @@ const BlogDetailPage = ({ locale }: BlogDetailPageProps) => {
   const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    headline: title,
-    description: description,
+    headline: seoTitleText,
+    description: metaDescriptionText,
     datePublished: post.publishedAt,
     dateModified: post.publishedAt,
     author: {
@@ -115,8 +119,8 @@ const BlogDetailPage = ({ locale }: BlogDetailPageProps) => {
       enPath={alternateEnPath}
     >
       <SEOHead
-        title={`${title} | SAN Solution Blog`}
-        description={description}
+        title={`${seoTitleText} | SAN Solution Blog`}
+        description={metaDescriptionText}
         canonicalPath={canonicalPath}
         locale={locale}
         alternateIdPath={alternateIdPath}
@@ -150,60 +154,35 @@ const BlogDetailPage = ({ locale }: BlogDetailPageProps) => {
               </span>
             </div>
 
-            <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl leading-tight">
+            <h1 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl leading-tight mb-8">
               {title}
             </h1>
 
-            <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-              {description}
-            </p>
+            <div className="mx-auto max-w-4xl mb-8">
+              {post.featuredImage && (
+                <img
+                  src={post.featuredImage}
+                  alt={title}
+                  className="w-full rounded-2xl object-cover shadow-lg aspect-[21/9]"
+                  loading="eager"
+                />
+              )}
+            </div>
+
+            <div className="space-y-2 text-lg leading-relaxed text-muted-foreground">
+              {description.split('\n').filter(Boolean).map((point, i) => (
+                <p key={i} className="flex gap-2">
+                  <span className="text-primary font-bold shrink-0">•</span>
+                  <span>{point}</span>
+                </p>
+              ))}
+            </div>
           </header>
 
           <div className="mx-auto max-w-3xl">
-            {/* E-E-A-T Author Card Header */}
-            <div className="mb-10 flex items-center gap-4 rounded-2xl border border-border bg-white p-5 shadow-sm">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <User className="h-6 w-6" aria-hidden="true" />
-              </div>
-              <div>
-                <div className="text-base font-bold text-foreground">{post.author.name}</div>
-                <div className="text-xs font-medium text-primary">{t(post.author.role, locale)}</div>
-                <div className="mt-1 text-xs text-muted-foreground">{t(post.author.bio, locale)}</div>
-              </div>
-            </div>
-
             {/* Article Content */}
-            <div className="prose prose-slate max-w-none dark:prose-invert prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary leading-relaxed text-foreground">
-              {content.split("\n\n").map((paragraph, idx) => {
-                if (paragraph.startsWith("### ")) {
-                  return (
-                    <h2 key={idx} className="mt-10 mb-4 text-2xl font-bold">
-                      {paragraph.replace("### ", "")}
-                    </h2>
-                  );
-                }
-                if (paragraph.startsWith("#### ")) {
-                  return (
-                    <h3 key={idx} className="mt-8 mb-3 text-xl font-semibold">
-                      {paragraph.replace("#### ", "")}
-                    </h3>
-                  );
-                }
-                if (paragraph.startsWith("- ")) {
-                  return (
-                    <ul key={idx} className="my-4 list-disc pl-6 space-y-2">
-                      {paragraph.split("\n").map((line, lIdx) => (
-                        <li key={lIdx}>{line.replace("- ", "")}</li>
-                      ))}
-                    </ul>
-                  );
-                }
-                return (
-                  <p key={idx} className="my-4 text-muted-foreground leading-relaxed">
-                    {paragraph}
-                  </p>
-                );
-              })}
+            <div className="prose prose-slate max-w-none dark:prose-invert prose-headings:font-bold prose-headings:tracking-tight prose-a:text-primary leading-relaxed text-foreground [&_img]:rounded-xl [&_img]:shadow-sm [&_p]:mb-6">
+              <ReactMarkdown rehypePlugins={[rehypeRaw]}>{content}</ReactMarkdown>
             </div>
 
             {/* Tags */}
