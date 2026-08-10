@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/sheet";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { trackEvent } from "@/lib/analytics";
-import { processHashPath, routeFor, routes } from "@/lib/routes";
+import { routeFor, routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 
 export type NavbarProps = {
@@ -28,11 +28,12 @@ type NavItem = {
 };
 
 const navLabels = {
+  solutions: { id: "Solusi", en: "Solutions" },
   services: { id: "Layanan", en: "Services" },
+  pricing: { id: "Harga", en: "Pricing" },
   caseStudies: { id: "Studi Kasus", en: "Case Studies" },
   blog: { id: "Blog", en: "Blog" },
   about: { id: "Tentang", en: "About" },
-  process: { id: "Proses", en: "Process" },
   contact: { id: "Kontak", en: "Contact" },
   cta: { id: "Konsultasi Gratis", en: "Free Consultation" },
   menu: { id: "Menu navigasi", en: "Navigation menu" },
@@ -41,11 +42,12 @@ const navLabels = {
 } as const;
 
 const buildNavItems = (locale: SiteLocale): NavItem[] => [
+  { label: navLabels.solutions, href: routeFor("solutions", locale) },
   { label: navLabels.services, href: routeFor("services", locale) },
+  { label: navLabels.pricing, href: routeFor("pricing", locale) },
   { label: navLabels.caseStudies, href: routeFor("caseStudies", locale) },
   { label: navLabels.blog, href: routeFor("blog", locale) },
   { label: navLabels.about, href: routeFor("about", locale) },
-  { label: navLabels.process, href: processHashPath(locale) },
   { label: navLabels.contact, href: routeFor("contact", locale) },
 ];
 

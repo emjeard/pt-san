@@ -9,6 +9,9 @@ import HomePage from "./pages/HomePage";
 import NotFound from "./pages/NotFound";
 
 const AboutPage = lazy(() => import("./pages/AboutPage"));
+const SolutionsIndexPage = lazy(() => import("./pages/SolutionsIndexPage"));
+const SolutionDetailPage = lazy(() => import("./pages/SolutionDetailPage"));
+const PricingPage = lazy(() => import("./pages/PricingPage"));
 const ServicesIndexPage = lazy(() => import("./pages/ServicesIndexPage"));
 const ServiceDetailPage = lazy(() => import("./pages/ServiceDetailPage"));
 const CaseStudiesIndexPage = lazy(() => import("./pages/CaseStudiesIndexPage"));
@@ -44,6 +47,13 @@ const App = () => (
           <Routes>
             <Route path="/" element={<HomePage locale="id" />} />
             <Route path="/en" element={<HomePage locale="en" />} />
+
+            <Route path="/solusi" element={<SolutionsIndexPage locale="id" />} />
+            <Route path="/en/solutions" element={<SolutionsIndexPage locale="en" />} />
+            <Route path="/solusi/:slug" element={<SolutionDetailPage locale="id" />} />
+            <Route path="/en/solutions/:slug" element={<SolutionDetailPage locale="en" />} />
+            <Route path="/harga" element={<PricingPage locale="id" />} />
+            <Route path="/en/pricing" element={<PricingPage locale="en" />} />
 
             <Route path="/tentang-kami" element={<AboutPage locale="id" />} />
             <Route path="/en/about" element={<AboutPage locale="en" />} />

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "sitemap": "node scripts/generate-sitemap.mjs",
-    "build": "npm run sitemap && vite build",
+    "build": "npm run sitemap && vite build && node scripts/generate-static-pages.mjs",
     "build:dev": "vite build --mode development",
     "db:blog:migrate": "vite-node scripts/migrate-blog.mjs --apply",
     "lint": "eslint .",

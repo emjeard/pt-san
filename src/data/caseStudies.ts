@@ -52,8 +52,8 @@ export const caseStudies: CaseStudy[] = [
       en: "National-scale data center operations required fast visitor security verification, precise asset audit trails, and zero-downtime operational reliability.",
     },
     solution: {
-      id: "Platform enterprise terpadu berbasis arsitektur microservices yang terisolasi tinggi — menjamin integritas data, ketersediaan operasional 99.99%, serta kemudahan integrasi antar-cabang secara terpusat.",
-      en: "A unified enterprise platform based on highly isolated microservices architecture — ensuring data integrity, 99.99% operational availability, and seamless multi-branch centralized integration.",
+      id: "Platform enterprise terpadu berbasis arsitektur microservices yang terisolasi tinggi — mendukung integritas data, ketersediaan tinggi, serta kemudahan integrasi antar-cabang secara terpusat.",
+      en: "A unified enterprise platform based on highly isolated microservices architecture — supporting data integrity, high availability, and seamless multi-branch centralized integration.",
     },
     features: [
       {

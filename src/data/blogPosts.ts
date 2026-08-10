@@ -162,8 +162,8 @@ Successful ERP deployment is not just installing software—it is building a sca
       en: "Building Scalable, Reliable, and Secure Enterprise System Architectures",
     },
     excerpt: {
-      id: "Studi arsitektur perangkat lunak enterprise: strategi microservices, high availability 99.99%, zero downtime deployment, dan proteksi data tingkat tinggi.",
-      en: "Enterprise software architecture study: microservices patterns, 99.99% high availability, zero-downtime deployment, and mission-critical data protection.",
+      id: "Studi arsitektur perangkat lunak enterprise: strategi microservices, high availability, deployment yang lebih aman, dan proteksi data tingkat tinggi.",
+      en: "Enterprise software architecture study: microservices patterns, high availability, safer deployment practices, and mission-critical data protection.",
     },
     category: {
       id: "Arsitektur & DevOps",
@@ -187,7 +187,7 @@ Tidak semua sistem harus langsung menggunakan arsitektur microservices yang rumi
 - **Modular Monolith**: Sangat ideal untuk tahap awal atau aplikasi skala menengah di mana batas antar-domain bisnis masih berkembang. Mudah di-deploy dan diuji secara holistik.
 - **Microservices**: Tepat diterapkan saat layanan tertentu (misal: mesin pembayaran atau pemrosesan absensi) memiliki lonjakan beban *traffic* yang jauh berbeda dari layanan lainnya.
 
-#### 2. Kunci Mencapai High Availability (99.99% Uptime)
+#### 2. Kunci Mencapai High Availability
 
 Untuk sistem *mission-critical* seperti pada BUMN, perbankan, atau instansi publik, *downtime* dapat berakibat fatal pada reputasi dan finansial:
 - **Load Balancing & Auto-Scaling**: Mendistribusikan beban trafik secara dinamis menggunakan Nginx, HAProxy, atau Kubernetes ingress controller.
@@ -218,7 +218,7 @@ Not every system requires complex microservices from day one:
 - **Modular Monolith**: Highly effective for initial phases or mid-sized platforms where domain boundaries are evolving. Simplifies deployment and end-to-end testing.
 - **Microservices**: Ideal when specific workloads (e.g., payment engines or attendance processing) experience traffic spikes vastly out-scaling other services.
 
-#### 2. Blueprint for 99.99% High Availability
+#### 2. Blueprint for High Availability
 
 For mission-critical environments in enterprise and public sectors, downtime carries severe financial and reputational consequences:
 - **Load Balancing & Auto-Scaling**: Distributing traffic dynamically using Nginx, HAProxy, or Kubernetes ingress controllers.

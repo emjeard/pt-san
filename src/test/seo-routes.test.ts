@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { siteConfig } from "@/config/site";
-import { routes, servicePath, caseStudyPath, blogPostPath } from "@/lib/routes";
+import { routes, servicePath, caseStudyPath, blogPostPath, solutionPath, contactPath } from "@/lib/routes";
 import { absoluteUrl } from "@/lib/seo";
 
 describe("site configuration", () => {
@@ -22,6 +22,8 @@ describe("locale routes", () => {
     expect(routes.home.en).toBe("/en");
     expect(routes.services.id).toBe("/layanan");
     expect(routes.services.en).toBe("/en/services");
+    expect(routes.solutions.id).toBe("/solusi");
+    expect(routes.pricing.en).toBe("/en/pricing");
     expect(routes.blog.id).toBe("/blog");
     expect(routes.blog.en).toBe("/en/blog");
     expect(servicePath("aplikasi-mobile", "id")).toBe("/layanan/aplikasi-mobile");
@@ -36,6 +38,11 @@ describe("locale routes", () => {
     );
     expect(blogPostPath("odoo-erp-implementation-guide-indonesia", "en")).toBe(
       "/en/blog/odoo-erp-implementation-guide-indonesia",
+    );
+    expect(solutionPath("website-bisnis", "id")).toBe("/solusi/website-bisnis");
+    expect(solutionPath("business-website", "en")).toBe("/en/solutions/business-website");
+    expect(contactPath("id", { solutionId: "san-site", packageId: "business" })).toBe(
+      "/kontak?solution=san-site&package=business",
     );
   });
 });

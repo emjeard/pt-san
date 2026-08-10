@@ -105,6 +105,7 @@ export const SEOHead = ({
     upsertMeta("og:url", canonical, "property");
     upsertMeta("og:image", image, "property");
     upsertMeta("og:locale", locale === "id" ? "id_ID" : "en_US", "property");
+    upsertMeta("og:locale:alternate", locale === "id" ? "en_US" : "id_ID", "property");
     upsertMeta("og:type", "website", "property");
     upsertMeta("og:site_name", "SAN Solution", "property");
 

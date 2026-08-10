@@ -1,4 +1,5 @@
 import type { SiteLocale } from "@/config/site";
+import { useSearchParams } from "react-router-dom";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { SEOHead } from "@/components/seo/SEOHead";
@@ -28,6 +29,7 @@ export type ContactPageProps = {
 
 const ContactPage = ({ locale }: ContactPageProps) => {
   const copy = pageCopy[locale];
+  const [searchParams] = useSearchParams();
 
   return (
     <SiteLayout
@@ -56,7 +58,11 @@ const ContactPage = ({ locale }: ContactPageProps) => {
         </div>
       </div>
 
-      <ContactSection />
+      <ContactSection
+        initialSolutionId={searchParams.get("solution") ?? undefined}
+        initialPackageId={searchParams.get("package") ?? undefined}
+        initialType={searchParams.get("type") === "custom" ? "custom" : undefined}
+      />
     </SiteLayout>
   );
 };

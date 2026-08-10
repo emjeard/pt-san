@@ -3,7 +3,7 @@
  * Generates public/sitemap.xml for www.sansolution.tech
  * Run: npm run sitemap
  */
-import { readFileSync, writeFileSync, statSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { neon } from "@neondatabase/serverless";
@@ -18,6 +18,8 @@ const staticRoutes = {
   id: [
     "/",
     "/tentang-kami",
+    "/solusi",
+    "/harga",
     "/layanan",
     "/studi-kasus",
     "/blog",
@@ -28,12 +30,33 @@ const staticRoutes = {
   en: [
     "/en",
     "/en/about",
+    "/en/solutions",
+    "/en/pricing",
     "/en/services",
     "/en/case-studies",
     "/en/blog",
     "/en/contact",
     "/en/privacy",
     "/en/terms",
+  ],
+};
+
+const solutionSlugs = {
+  id: [
+    "website-bisnis",
+    "website-perusahaan",
+    "portal-media",
+    "platform-pendidikan",
+    "ecommerce-marketplace",
+    "marketing-automation",
+  ],
+  en: [
+    "business-website",
+    "corporate-website",
+    "publishing-platform",
+    "education-platform",
+    "ecommerce-marketplace",
+    "marketing-automation",
   ],
 };
 
@@ -131,17 +154,6 @@ const getBlogSlugs = async () => {
   }
 };
 
-const formatDate = (date) => date.toISOString().slice(0, 10);
-
-const getLastmod = () => {
-  try {
-    const pkgStat = statSync(join(root, "package.json"));
-    return formatDate(pkgStat.mtime);
-  } catch {
-    return formatDate(new Date("2026-07-19"));
-  }
-};
-
 const buildPaths = (blogSlugs) => {
   const paths = [...staticRoutes.id, ...staticRoutes.en];
 
@@ -150,6 +162,12 @@ const buildPaths = (blogSlugs) => {
   }
   for (const slug of serviceSlugs.en) {
     paths.push(`/en/services/${slug}`);
+  }
+  for (const slug of solutionSlugs.id) {
+    paths.push(`/solusi/${slug}`);
+  }
+  for (const slug of solutionSlugs.en) {
+    paths.push(`/en/solutions/${slug}`);
   }
   for (const slug of caseStudySlugs.id) {
     paths.push(`/studi-kasus/${slug}`);
@@ -174,15 +192,9 @@ const toLoc = (path) => {
 
 const blogSlugs = await getBlogSlugs();
 const paths = buildPaths(blogSlugs);
-const lastmod = getLastmod();
 const urls = paths
   .map(
-    (path) => `  <url>
-    <loc>${toLoc(path)}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>${path === "/" || path === "/en" ? "1.0" : path.split("/").length <= 2 ? "0.8" : "0.7"}</priority>
-  </url>`,
+    (path) => `  <url>\n    <loc>${toLoc(path)}</loc>\n  </url>`,
   )
   .join("\n");
 
@@ -193,4 +205,4 @@ ${urls}
 `;
 
 writeFileSync(outputPath, xml, "utf8");
-console.log(`Wrote ${outputPath} (${paths.length} URLs, lastmod=${lastmod})`);
+console.log(`Wrote ${outputPath} (${paths.length} canonical URLs)`);

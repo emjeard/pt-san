@@ -22,7 +22,7 @@ Dokumen ini berisi panduan strategis bagi tim Marketing & SEO **SAN Solution** (
 * **Target Media**: Tech in Asia Indonesia, DailySocial, Kompasiana Tekno, Medium Engineering, Kumparan Tech.
 * **Topik Rekomendasi**:
   * *"Tantangan Migrasi Sistem Legacy ke Odoo ERP bagi Manufaktur Indonesia"*
-  * *"Membangun Arsitektur Microservices dengan Uptime 99.99%"*
+  * *"Membangun Arsitektur Microservices dengan High Availability"*
 
 ### 3. Kontribusi Kode & Open Source Sponsorship
 * **Tindakan**: Buat modul open-source Odoo atau library helper pengembangan software publik di GitHub resmi SAN Solution (`https://github.com/san-solution`).

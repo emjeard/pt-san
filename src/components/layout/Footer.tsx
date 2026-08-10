@@ -2,13 +2,15 @@ import { Link } from "react-router-dom";
 import { Github, Linkedin, MessageCircle } from "lucide-react";
 import { siteConfig, getWhatsAppUrl } from "@/config/site";
 import { getCoreServices } from "@/data/services";
+import { solutions } from "@/data/solutions";
 import { t } from "@/data/translations";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { trackEvent } from "@/lib/analytics";
-import { isValidHref, routeFor, servicePath } from "@/lib/routes";
+import { isValidHref, routeFor, servicePath, solutionPath } from "@/lib/routes";
 
 const footerCopy = {
-  services: { id: "Layanan", en: "Services" },
+  solutions: { id: "Solusi", en: "Solutions" },
+  services: { id: "Layanan Custom", en: "Custom Services" },
   company: { id: "Perusahaan", en: "Company" },
   legal: { id: "Legal", en: "Legal" },
   connect: { id: "Hubungi", en: "Connect" },
@@ -54,7 +56,7 @@ export const Footer = () => {
   return (
     <footer className="dark-section bg-dark-section text-foreground">
       <div className="container-narrow section-padding pb-10 pt-14">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-1">
             <Link
               to={routeFor("home", lang)}
@@ -71,6 +73,21 @@ export const Footer = () => {
             <p className="mt-4 max-w-sm text-sm text-muted-foreground">
               {footerCopy.description[lang]}
             </p>
+          </div>
+
+          <div>
+            <h2 className="font-heading text-sm font-semibold uppercase tracking-wider text-foreground">
+              {footerCopy.solutions[lang]}
+            </h2>
+            <ul className="mt-4 space-y-1">
+              {solutions.map((solution) => (
+                <li key={solution.id}>
+                  <Link to={solutionPath(solution.slug[lang], lang)} className={linkClass}>
+                    {solution.title[lang]}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div>

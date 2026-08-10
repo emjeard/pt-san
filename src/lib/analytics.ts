@@ -1,6 +1,13 @@
 import { siteConfig } from "@/config/site";
 
 export type AnalyticsEventName =
+  | "solution_view"
+  | "pricing_view"
+  | "pricing_package_select"
+  | "solution_cta_click"
+  | "custom_service_cta_click"
+  | "case_study_click"
+  | "contact_form_submit"
   | "consultation_cta_click"
   | "contact_form_start"
   | "contact_form_success"

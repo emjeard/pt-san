@@ -1,97 +1,70 @@
 import type { SiteLocale } from "@/config/site";
+import { siteConfig } from "@/config/site";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { SEOHead } from "@/components/seo/SEOHead";
 import HeroSection from "@/components/sections/HeroSection";
 import TrustSection from "@/components/sections/TrustSection";
 import ClientsSection from "@/components/sections/ClientsSection";
-import ProblemsSection from "@/components/sections/ProblemsSection";
-import ServicesSection from "@/components/sections/ServicesSection";
 import CaseStudiesSection from "@/components/sections/CaseStudiesSection";
 import WhyUsSection from "@/components/sections/WhyUsSection";
-import HowWeWorkSection from "@/components/sections/HowWeWorkSection";
-import ExpertiseSection from "@/components/sections/ExpertiseSection";
-import TechStackSection from "@/components/sections/TechStackSection";
-import TimelineSection from "@/components/sections/TimelineSection";
 import FAQSection from "@/components/sections/FAQSection";
 import ContactSection from "@/components/sections/ContactSection";
+import { ChoosePathSection } from "@/components/solutions/ChoosePathSection";
+import { ReadySolutionsSection } from "@/components/solutions/ReadySolutionsSection";
+import { CustomEngineeringSection } from "@/components/solutions/CustomEngineeringSection";
+import { ProcessPathsSection } from "@/components/solutions/ProcessPathsSection";
+import { PricingSummarySection } from "@/components/solutions/PricingSummarySection";
 import { routes } from "@/lib/routes";
 
 const homeSeo = {
   id: {
-    title: "SAN Solution | Software, Website, Aplikasi, dan Sistem Bisnis",
-    description:
-      "SAN Solution membantu perusahaan, startup, dan organisasi membangun website, aplikasi mobile, produk SaaS, sistem enterprise, dan solusi digital yang siap berkembang.",
+    title: "SAN Solution | Solusi Digital dari Website hingga Software Custom",
+    description: "Solusi digital untuk bisnis, dari website siap pakai hingga software custom. Mulai dari paket website bisnis, platform vertikal, hingga sistem enterprise.",
   },
   en: {
-    title: "SAN Solution | Software, Websites, Apps, and Business Systems",
-    description:
-      "SAN Solution helps companies, startups, and organizations build websites, mobile apps, SaaS products, enterprise systems, and digital solutions ready to grow.",
+    title: "SAN Solution | Digital Solutions from Websites to Custom Software",
+    description: "Digital solutions for every stage of business, from ready-to-launch websites and vertical platforms to custom enterprise software.",
   },
 } as const;
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
-  "@type": ["Organization", "ProfessionalService", "LocalBusiness"],
+  "@type": "Organization",
   name: "SAN Solution",
-  url: "https://www.sansolution.tech/",
-  logo: "https://www.sansolution.tech/logo.png",
-  image: "https://www.sansolution.tech/og-san-solution.jpg",
-  description:
-    "SAN Solution membantu perusahaan, startup, dan organisasi membangun sistem enterprise, implementasi Odoo ERP, produk SaaS, aplikasi mobile, dan solusi digital skala besar.",
-  foundingDate: "2023",
-  telephone: "+628568862327",
-  email: "kontak@sansolution.tech",
-  areaServed: {
-    "@type": "Country",
-    name: "Indonesia",
-  },
-  sameAs: [
-    "https://www.linkedin.com/company/san-solution",
-    "https://github.com/san-solution",
-  ],
-  address: {
-    "@type": "PostalAddress",
-    addressCountry: "ID",
-    addressRegion: "Indonesia",
-  },
+  url: `${siteConfig.siteUrl}/`,
+  logo: `${siteConfig.siteUrl}/logo.png`,
+  image: `${siteConfig.siteUrl}/og-san-solution.jpg`,
+  description: "Solusi digital untuk bisnis, dari website siap pakai hingga software custom.",
+  foundingDate: siteConfig.company.foundingYear,
+  telephone: `+${siteConfig.contact.whatsappNumber}`,
+  email: siteConfig.contact.email,
+  areaServed: { "@type": "Country", name: "Indonesia" },
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+628568862327",
+    telephone: `+${siteConfig.contact.whatsappNumber}`,
     contactType: "customer service",
-    email: "kontak@sansolution.tech",
+    email: siteConfig.contact.email,
     availableLanguage: ["Indonesian", "English"],
   },
 };
 
-export type HomePageProps = {
-  locale: SiteLocale;
-};
+export type HomePageProps = { locale: SiteLocale };
 
 const HomePage = ({ locale }: HomePageProps) => {
   const seo = homeSeo[locale];
-
   return (
     <SiteLayout locale={locale} idPath={routes.home.id} enPath={routes.home.en}>
-      <SEOHead
-        title={seo.title}
-        description={seo.description}
-        canonicalPath={routes.home[locale]}
-        locale={locale}
-        alternateIdPath={routes.home.id}
-        alternateEnPath={routes.home.en}
-        jsonLd={organizationJsonLd}
-      />
+      <SEOHead title={seo.title} description={seo.description} canonicalPath={routes.home[locale]} locale={locale} alternateIdPath={routes.home.id} alternateEnPath={routes.home.en} jsonLd={organizationJsonLd} />
       <HeroSection />
       <TrustSection />
       <ClientsSection />
-      <ProblemsSection />
-      <ServicesSection />
+      <ChoosePathSection locale={locale} />
+      <ReadySolutionsSection locale={locale} />
+      <CustomEngineeringSection locale={locale} />
       <CaseStudiesSection />
+      <ProcessPathsSection locale={locale} />
+      <PricingSummarySection locale={locale} />
       <WhyUsSection />
-      <HowWeWorkSection />
-      <ExpertiseSection />
-      <TechStackSection />
-      <TimelineSection />
       <FAQSection />
       <ContactSection />
     </SiteLayout>

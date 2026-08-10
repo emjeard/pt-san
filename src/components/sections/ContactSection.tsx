@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Reveal } from "@/components/ui-custom/Reveal";
 import { SectionHeading } from "@/components/ui-custom/SectionHeading";
 import { getWhatsAppUrl, siteConfig } from "@/config/site";
+import { getSolutionById } from "@/data/solutions";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { translations, t } from "@/data/translations";
 import { trackEvent } from "@/lib/analytics";
@@ -16,6 +17,13 @@ import {
   type ContactFormData,
   type ContactFormErrors,
 } from "@/lib/contact";
+import { buildWhatsAppMessage } from "@/lib/lead";
+
+export type ContactSectionProps = {
+  initialSolutionId?: string;
+  initialPackageId?: string;
+  initialType?: "custom";
+};
 
 type FormState = {
   name: string;
@@ -39,7 +47,7 @@ const emptyForm = (): FormState => ({
   website: "",
 });
 
-const ContactSection = () => {
+const ContactSection = ({ initialSolutionId, initialPackageId, initialType }: ContactSectionProps = {}) => {
   const { lang } = useLanguage();
   const c = translations.contact;
   const [form, setForm] = useState<FormState>(emptyForm);
@@ -50,7 +58,20 @@ const ContactSection = () => {
   const hasTrackedStart = useRef(false);
   const endpointConfigured = isContactFormConfigured();
 
-  const whatsappUrl = getWhatsAppUrl(t(c.whatsappPrefill, lang));
+  const selectedSolution = initialSolutionId ? getSolutionById(initialSolutionId) : undefined;
+  const selectedPackage = selectedSolution?.packages?.find((pkg) => pkg.id === initialPackageId);
+  const preselectedProjectType = selectedSolution
+    ? `${t(selectedSolution.title, lang)}${selectedPackage ? ` — ${t(selectedPackage.name, lang)}` : ""}`
+    : initialType === "custom"
+      ? lang === "id" ? "Software custom" : "Custom software"
+      : "";
+  const whatsappUrl = getWhatsAppUrl(
+    selectedSolution
+      ? buildWhatsAppMessage({ locale: lang, solutionId: selectedSolution.id, packageId: selectedPackage?.id })
+      : initialType === "custom"
+        ? buildWhatsAppMessage({ locale: lang, custom: true })
+        : t(c.whatsappPrefill, lang),
+  );
 
   const mapValidationError = (message: string): string => {
     const map: Record<string, { en: string; id: string }> = {
@@ -90,7 +111,13 @@ const ContactSection = () => {
 
   useEffect(() => {
     formStartedAt.current = Date.now();
-  }, []);
+    if (preselectedProjectType) {
+      setForm((previous) => ({
+        ...previous,
+        projectType: previous.projectType || preselectedProjectType,
+      }));
+    }
+  }, [preselectedProjectType]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -99,6 +126,7 @@ const ContactSection = () => {
     setStatus("loading");
     setStatusMessage("");
     setErrors({});
+    trackEvent("contact_form_submit", { location: "contact_form", locale: lang });
 
     const payload: ContactFormData = {
       name: form.name,

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { siteConfig } from "@/config/site";
+import { trackEvent } from "@/lib/analytics";
 
 /**
  * Ensures GA4 is loaded and tracks SPA route transitions.
@@ -41,6 +42,14 @@ export const Analytics = () => {
         page_path: location.pathname + location.search,
         anonymize_ip: true,
       });
+    }
+
+    const locale = location.pathname.startsWith("/en") ? "en" : "id";
+    if (location.pathname === "/harga" || location.pathname === "/en/pricing") {
+      trackEvent("pricing_view", { locale });
+    } else if (location.pathname.startsWith("/solusi/") || location.pathname.startsWith("/en/solutions/")) {
+      const solutionId = location.pathname.split("/").filter(Boolean).at(-1);
+      trackEvent("solution_view", { locale, solution_id: solutionId });
     }
   }, [id, location.pathname, location.search]);
 
